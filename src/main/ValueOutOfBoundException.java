@@ -1,4 +1,4 @@
-package pg;
+package main;
 public class ValueOutOfBoundException extends Exception {
 
 	ValueOutOfBoundException(String exception)
