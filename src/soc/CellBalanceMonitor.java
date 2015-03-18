@@ -25,11 +25,12 @@ public class CellBalanceMonitor {
                 // so just give the position of the first cell we found
                 unbalancedCellPos = i;
                 report.setAlert(Alert.UNBALANCED);
+                break;
             }
         }
     }
 
-    public int getUnbalancedCell(int[] cellSOC) {
+    public int getUnbalancedCell() {
         return unbalancedCellPos;
     }
 }

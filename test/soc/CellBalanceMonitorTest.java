@@ -3,8 +3,7 @@ package soc;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class CellBalanceMonitorTest {
 
@@ -27,6 +26,14 @@ public class CellBalanceMonitorTest {
     public void testCheckCallBalanceForUnbalance() {
         monitor.checkCellBalance(new int[]{1, 10, 1, 10, 1});
         assertEquals("CheckCellBalance is not working for unbalanced cellSOC", report.getAlert(), Alert.UNBALANCED);
+    }
+
+    @Test
+    public void testGetUnbalancedCell() {
+        monitor.checkCellBalance(new int[]{1, 10, 1, 10, 1});
+        assertEquals("Can't get unbalanced cell position", 1, monitor.getUnbalancedCell());
+        assertTrue("Cell position out of range", monitor.getUnbalancedCell() >= 0);
+        assertTrue("Cell position out of range", monitor.getUnbalancedCell() < 5);
 
     }
 }
