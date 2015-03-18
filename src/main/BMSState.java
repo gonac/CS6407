@@ -1,4 +1,4 @@
-package pg;
+package main;
 public enum BMSState {
 		IDLE(0),
 		CHARGING(1),

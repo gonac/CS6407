@@ -1,4 +1,4 @@
-package pg;
+package main;
 public interface ProcessingUnitInterface {
 	
 	public Integer getChargingCyclesLeft();

@@ -1,4 +1,4 @@
-package pg;
+package main;
 public class Alert {
 
 	public static Integer NO_ALERT=0;

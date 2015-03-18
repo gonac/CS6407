@@ -1,4 +1,4 @@
-package pg;
+package main;
 public class GPSStub {
 
 	private Float nextNearestPumpDistance;		//Distance in Kilo Meters

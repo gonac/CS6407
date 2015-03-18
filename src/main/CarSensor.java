@@ -1,4 +1,4 @@
-package pg;
+package main;
 public class CarSensor {
 	
 	private Float consumptionRate;	//
