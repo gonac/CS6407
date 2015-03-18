@@ -3,7 +3,7 @@ package soc;
 
 public class SOCLogic {
 
-    private int[] cellSoc;
+    private int[] cellSoc = new int[5];
 
     private int batterySoc;
 
@@ -20,9 +20,8 @@ public class SOCLogic {
 
     }
 
-    public void setUp(int[] cellSoc, int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity) {
+    public void setUp(int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity) {
         this.batterySoc = batterySoc;
-        this.cellSoc = cellSoc;
         this.cellPower = cellPower;
         this.batteryPower = batteryPower;
         this.cellCapacity = cellCapacity;
@@ -54,7 +53,7 @@ public class SOCLogic {
 
 
         for (int i = 0; i < cellPower.length; i++) {
-            cellSoc[i] = (int) ((cellPower[i] / cellCapacity) * 100);
+            this.cellSoc[i] = (int) ((cellPower[i] / cellCapacity) * 100);
             if (cellSoc[i] > 100)
                 throw new ValueOutOfBoundException("Value out of bounds");
         }
