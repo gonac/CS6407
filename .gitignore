@@ -1,4 +1,8 @@
 *.class
+out
+res
+report
+
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
