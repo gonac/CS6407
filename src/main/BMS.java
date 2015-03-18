@@ -11,31 +11,31 @@ public class BMS {
 	
 	//Keys for Storing corresponding data in memory
 	//Fixed Inputs that are provided by Manufacturer
-	static final String CHARGING_CYCLES="chargingCycles";							//Provided by Manufacturer
-	static final String MAXIMUM_OPERATING_CURRENT="maxOperatingCurrent";			//Max operating current provided by Manufacturer
-	static final String MINIMUM_OPERATING_CURRENT="minOperatingCurrent";			//Min operating current provided by Manufacturer
-	static final String MAXIMUM_OPERATING_VOLTAGE="maxOperatingVoltage";			//Max operating Voltage provided by Manufacturer
-	static final String MINIMUM_OPERATING_VOLTAGE="minOperatingVoltage";			//Min operating Voltage provided by Manufacturer
-	static final String MAXIMUM_OPERATING_TEMPERATURE="maxOperatingTemperature";	//Max operating current provided by Manufacturer
-	static final String MINIMUM_OPERATING_TEMPERATURE="minOperatingTemperature";	//Min operating current provided by Manufacturer
-	static final String TOTAL_BATTERY_CAPACITY="totalBatteryCapacity";				//Total battery capacity provided by Manufacturer	
+	public static final String CHARGING_CYCLES="chargingCycles";							//Provided by Manufacturer
+	public static final String MAXIMUM_OPERATING_CURRENT="maxOperatingCurrent";			//Max operating current provided by Manufacturer
+	public static final String MINIMUM_OPERATING_CURRENT="minOperatingCurrent";			//Min operating current provided by Manufacturer
+	public static final String MAXIMUM_OPERATING_VOLTAGE="maxOperatingVoltage";			//Max operating Voltage provided by Manufacturer
+	public static final String MINIMUM_OPERATING_VOLTAGE="minOperatingVoltage";			//Min operating Voltage provided by Manufacturer
+	public static final String MAXIMUM_OPERATING_TEMPERATURE="maxOperatingTemperature";	//Max operating current provided by Manufacturer
+	public static final String MINIMUM_OPERATING_TEMPERATURE="minOperatingTemperature";	//Min operating current provided by Manufacturer
+	public static final String TOTAL_BATTERY_CAPACITY="totalBatteryCapacity";				//Total battery capacity provided by Manufacturer	
 	
 	//Data stored/updated by the system
-	static final String CHARGING_CYCLES_USED="chargingCyclesUsed";						//Charging cycles used by BMS, stored by Control Group
-	static final String CHARGING_CURRENT="chargingCurrent";							//Charging current, provided by user
-	static final String CHARGING_VOLTAGE="chargingVolate";							//Charging voltage, provided by user
-	static final String PRESENTCAPACITY="currentBatteryCapacity";					//Current battery capacity, stored by Health Group in the memory
-	static final String BATTERY_CHARGE_AMOUNT="batteryChargeLevel";					//Total charge amount in the battery, stored by Charge Group
-	static final String BATTERY_LEVEL="batteryLevel";								//Total battery level (%) in the batter, stored by Charge Group
-	static final String DISTANCE_TRAVELLED="distanceTravelled";						//Distance traveled, stored by Integration Group
-	static final String CHARGE_AMOUNT_CELL1="chargeCell1";							//Amount of charge in Cell 1, provided by user
-	static final String CHARGE_AMOUNT_CELL2="chargeCell2";							//Amount of charge in Cell 2, provided by user
-	static final String CHARGE_AMOUNT_CELL3="chargeCell3";							//Amount of charge in Cell 3, provided by user
-	static final String CHARGE_AMOUNT_CELL4="chargeCell4";							//Amount of charge in Cell 4, provided by user
-	static final String CHARGE_AMOUNT_CELL5="chargeCell5";							//Amount of charge in Cell 5, provided by user
-	static final String CURRENT_BATTERY_TEMPERATURE="currentBatteryTemperature";	//Current battery temperature, provided by user
-	static final String CAR_SPEED="carSpeed";										//Car speed, provided by user
-	static final String CAR_LOAD="carLoad";											//Load on car battery, stored by Control Group
+	public static final String CHARGING_CYCLES_USED="chargingCyclesUsed";						//Charging cycles used by BMS, stored by Control Group
+	public static final String CHARGING_CURRENT="chargingCurrent";							//Charging current, provided by user
+	public static final String CHARGING_VOLTAGE="chargingVolate";							//Charging voltage, provided by user
+	public static final String PRESENTCAPACITY="currentBatteryCapacity";					//Current battery capacity, stored by Health Group in the memory
+	public static final String BATTERY_CHARGE_AMOUNT="batteryChargeLevel";					//Total charge amount in the battery, stored by Charge Group
+	public static final String BATTERY_LEVEL="batteryLevel";								//Total battery level (%) in the batter, stored by Charge Group
+	public static final String DISTANCE_TRAVELLED="distanceTravelled";						//Distance traveled, stored by Integration Group
+	public static final String CHARGE_AMOUNT_CELL1="chargeCell1";							//Amount of charge in Cell 1, provided by user
+	public static final String CHARGE_AMOUNT_CELL2="chargeCell2";							//Amount of charge in Cell 2, provided by user
+	public static final String CHARGE_AMOUNT_CELL3="chargeCell3";							//Amount of charge in Cell 3, provided by user
+	public static final String CHARGE_AMOUNT_CELL4="chargeCell4";							//Amount of charge in Cell 4, provided by user
+	public static final String CHARGE_AMOUNT_CELL5="chargeCell5";							//Amount of charge in Cell 5, provided by user
+	public static final String CURRENT_BATTERY_TEMPERATURE="currentBatteryTemperature";	//Current battery temperature, provided by user
+	public static final String CAR_SPEED="carSpeed";										//Car speed, provided by user
+	public static final String CAR_LOAD="carLoad";											//Load on car battery, stored by Control Group
 	
 	//BMS State
 	
