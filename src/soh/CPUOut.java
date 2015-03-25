@@ -1,4 +1,5 @@
-package sn;
+
+package soh;
 
 public class CPUOut {
 	float presentCapacity;

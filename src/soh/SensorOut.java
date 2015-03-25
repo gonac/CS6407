@@ -1,4 +1,4 @@
-package sn;
+package soh;
 
 public class SensorOut {
 	float voltage[];float Temperature;float Current;

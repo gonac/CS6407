@@ -1,4 +1,4 @@
-package sn;
+package soh;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +17,7 @@ public class RUlSOHTest {
 		
 		assertEquals(ExpectRUl,sOHresult);
 	}
-	
+
 	@Test
 	public void SOHOutofRange() {
 

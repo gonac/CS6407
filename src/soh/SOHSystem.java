@@ -1,4 +1,4 @@
-package sn;
+package soh;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -100,12 +100,10 @@ public class SOHSystem {
 						) {
 					cpuOut = new CPUOut(PresentCapacity_me, InCA_me);
 					int RUL = cpuOut.getRUL();
-					if (0 <= RUL && RUL <= 1195) {
+			
 						result = RUL;
 
-					} else {
-						result = expection.RULOutofRange;
-					}
+			
 
 				} else {
 					result = expection.memoryDataWrong;
@@ -154,12 +152,10 @@ public class SOHSystem {
 				if (PresentCapacity_me <= 18000 && PresentCapacity_me >= 0) {
 					cpuOut = new CPUOut(PresentCapacity_me, InCA_me);
 					int SOH = cpuOut.getSOH();
-					if (0 <= SOH && SOH <= 100) {
+			
 						result = SOH;
 
-					} else {
-						result = expection.SOHOutofRange;
-					}
+			
 
 				} else {
 					result = expection.memoryDataWrong;

@@ -1,4 +1,4 @@
-package sn;
+package soh;
 
 public class MemoryOut {
 	float voltage;int time;float Current;
