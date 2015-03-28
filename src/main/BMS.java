@@ -84,7 +84,7 @@ public class BMS {
         
         centralStorage.put(BMS.PRESENTCAPACITY, new Float(0));
         centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, new Float(0));
-        centralStorage.put(BMS.BATTERY_LEVEL, new Float(0));
+        centralStorage.put(BMS.BATTERY_LEVEL, new Integer(0));
         centralStorage.put(BMS.DISTANCE_TRAVELLED, new Float(0));
         
         
@@ -94,7 +94,7 @@ public class BMS {
         
         
         /*Initializing object for each module*/
-        
+        chargeBatteryMonitor=new BatteryMonitor(socBatteryReport);
 
         processingUnit = new ProcessingUnit(socBatteryReport);
 
@@ -118,9 +118,14 @@ public class BMS {
         return centralStorage.get(key);
     }
 
-    public void executeProcessingUnit() throws ValueOutOfBoundException {
-        processingUnit.execute();
+    
+    //Executing threads of other groups
+    public void executeBMSModule()
+    {
+    	this.chargeBatteryMonitor.start();
+    	this.processingUnit.start();
     }
+    
 
     //Function for storing user Inputs into Memory and validating it
     public Boolean storeUserInputs(String[] args) {
@@ -221,28 +226,11 @@ public class BMS {
         }
 
         bmsObject.initializeDummy();
+        
+        bmsObject.executeBMSModule();
 
         //Thread to Run Integration Part
-        new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                do {
-
-                    try {
-                        bmsObject.executeProcessingUnit();
-                        Thread.sleep(1000);
-                    } catch (InterruptedException | ValueOutOfBoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                }
-                while ((Float) getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Float) getDataInCollection(BMS.BATTERY_LEVEL) < 100);
-            }
-
-        }.run();
+        
 
 
         System.out.println("\nThanks for checking out our BMS. Yo Yo!!!");

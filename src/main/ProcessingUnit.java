@@ -3,7 +3,7 @@ package main;
 import soc.BatteryReport;
 import soc.ReportObservable;
 
-public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable{
+public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable {
 
     //Defining Inputs from Sensors
     private Float kmLeftInBattery;
@@ -39,7 +39,7 @@ public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable
         speed = (Float) BMS.getDataInCollection(BMS.CAR_SPEED);
         consumptionRate = (Float) BMS.getDataInCollection(BMS.CAR_LOAD);
 
-        nextNearestPumpDistance = 200f;
+        nextNearestPumpDistance = 1000f;
     }
 
     public Float getSpeed() {
@@ -84,9 +84,7 @@ public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable
 
         nextNearestPumpDistance = nextNearestPumpDistance - currentDistanceTraveled;
 
-        System.out.println("Distance to Next Pummp Temp : " + (nextNearestPumpDistance));
-
-        this.updateBatteryChargeLevelLeft(currentDistanceTraveled);
+        //this.updateBatteryChargeLevelLeft(currentDistanceTraveled);
 
     }
 
@@ -110,12 +108,12 @@ public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable
     }
 
 
-    @Override
+    /*@Override
     public void storeBatteryLevel() {
         // TODO Auto-generated method stub
         Float batteryLevel = (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) - 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
         BMS.storeDataInCollection(BMS.BATTERY_LEVEL, batteryLevel);
-    }
+    }*/
 
 
     public void storeChargingBatteryLevel() {
@@ -197,18 +195,20 @@ public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable
 
                     System.out.println("------ Presenting GUI Output -------\n");
 
-                    storeBatteryLevel();
+                    //storeBatteryLevel();
                     setDistanceTravelledByCar();
 
-                    System.out.println("Car Speed : " + speed);
+                    System.out.format("Car Speed : %.2f Km/hr \n",speed);
                     showBatteryLevel();
                     System.out.println("Charge Amount : " + BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
-                    System.out.println("Distance Left : " + getDistanceLeftInBattery());
-                    System.out.println("Total Distance travelled : " + BMS.getDataInCollection(BMS.DISTANCE_TRAVELLED));
-                    System.out.println("Time Left for next charge : " + getTimeLeftInBattery());
+                    System.out.format("Distance Left : %.2f Km \n",getDistanceLeftInBattery());
+                    System.out.format("Total Distance travelled : %.2f Km \n", BMS.getDataInCollection(BMS.DISTANCE_TRAVELLED));
+                    System.out.format("Time Left for next charge : %.2f hours \n", getTimeLeftInBattery());
                     System.out.println("Charging Cycles left : " + getChargingCyclesLeft());
 
-                    System.out.println("Distance to next Pump : " + nextNearestPumpDistance);
+                    System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(nextNearestPumpDistance));
+                    
+                    System.out.format("Battery Temperature : %.2f degree celcius",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
 
                     if (alert.getType() > 0) {
                         showAlerts(alert);
@@ -240,6 +240,27 @@ public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable
             System.err.println("Exception occured 2 : " + e.getStackTrace() +
                     e.getMessage());
         }
+    }
+    
+    
+    @Override
+    public void run()
+    {
+    	do {
+    		
+    		this.execute();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100);
+    	
+    	//BMS.BMS_STATE=BMSState.IDLE;
     }
 
 

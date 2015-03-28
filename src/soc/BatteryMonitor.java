@@ -69,6 +69,7 @@ public class BatteryMonitor extends Thread {
 
             try {
                 Thread.sleep(1000);
+                thermalMonitor.temp+=0.5;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

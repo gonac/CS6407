@@ -10,11 +10,7 @@ public interface ProcessingUnitInterface {
 
     public Float getTimeLeftInBattery() throws ValueOutOfBoundException;
 
-    public void storeBatteryLevel();
-
     public void showBatteryLevel();
-
-    public void execute();
 
     public Integer showAlerts(Alert alert);
 
