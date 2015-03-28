@@ -78,7 +78,7 @@ public class BatteryMonitor extends Thread {
                     on = false;
             } else if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
                 //soc
-                //cellBalanceMonitor
+                //cellBalanceMonito
                 //chargeMonitor
                 on = true;
                 try {
