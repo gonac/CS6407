@@ -14,8 +14,6 @@ public interface ProcessingUnitInterface {
 
     public void showBatteryLevel();
 
-    public void storeCarSpeed(Float speed);
-
     public void execute();
 
     public Integer showAlerts(Integer alert);

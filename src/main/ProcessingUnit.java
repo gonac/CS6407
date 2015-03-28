@@ -1,6 +1,6 @@
 package main;
 
-public class ProcessingUnit implements ProcessingUnitInterface {
+public class ProcessingUnit implements ProcessingUnitInterface{
 
     //Defining Inputs from Sensors
     private Float kmLeftInBattery;
@@ -17,7 +17,7 @@ public class ProcessingUnit implements ProcessingUnitInterface {
 
 
     ProcessingUnit() throws ValueOutOfBoundException {
-        cs = new CarSensor(5.5f, 50f);
+        cs = new CarSensor(5.5f);
         gps = new GPSStub(200f);
         currentDistanceTraveled = 0f;
         alert = Alert.NO_ALERT;
@@ -114,18 +114,6 @@ public class ProcessingUnit implements ProcessingUnitInterface {
     public void showBatteryLevel() {
         // TODO Auto-generated method stub
         System.out.println("Battery Level : " + BMS.getDataInCollection(BMS.BATTERY_LEVEL));
-    }
-
-
-    @Override
-    public void storeCarSpeed(Float speed) {
-        // TODO Auto-generated method stub
-        try {
-            cs.updateCarSpeed(speed);
-        } catch (ValueOutOfBoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 
