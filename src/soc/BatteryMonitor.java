@@ -17,6 +17,7 @@ public class BatteryMonitor extends Thread {
     private CellBalanceMonitor cellBalanceMonitor;
     //private BatteryReport batteryReport;
     private ChargeMonitor chargeMonitor;
+
     private ThermalMonitor thermalMonitor;
 
     public BatteryMonitor( BatteryReport batteryReport) {
@@ -69,7 +70,6 @@ public class BatteryMonitor extends Thread {
 
             try {
                 Thread.sleep(1000);
-                thermalMonitor.temp += 0.5;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -77,9 +77,7 @@ public class BatteryMonitor extends Thread {
             if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
                     on = false;
             } else if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
-                //soc
-                //cellBalanceMonito
-                //chargeMonitor
+
                 on = true;
                 try {
                     soc.setCellSoc();
