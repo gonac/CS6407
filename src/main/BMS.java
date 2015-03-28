@@ -38,6 +38,11 @@ public class BMS {
 
     public static BMSState BMS_STATE;
     public static ConcurrentHashMap centralStorage;                //Collection for storing data of BMS in (key, pair) format
+    
+    
+    /*Required Objects of all groups which is required for operations like adding observers
+     */
+    public BatteryReport socBatteryReport;							//Object for storing observers to the list, used by Charge group
 
 
     //All Groups references
@@ -74,6 +79,14 @@ public class BMS {
         centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, new Float(0));
         centralStorage.put(BMS.BATTERY_LEVEL, new Float(0));
         centralStorage.put(BMS.DISTANCE_TRAVELLED, new Float(0));
+        
+        
+        /*Initializing all the required objects*/
+        socBatteryReport=new BatteryReport();
+        
+        
+        
+        /*Initializing object for each module*/
 
         processingUnit = new ProcessingUnit();
 
@@ -95,42 +108,6 @@ public class BMS {
     //Function to get data from Collection
     public static Object getDataInCollection(String key) {
         return centralStorage.get(key);
-    }
-
-    public static void main(String... args) throws NumberFormatException, InterruptedException, ValueOutOfBoundException {
-        //Declaring BMS Object
-        final BMS bmsObject = new BMS();
-
-        if (!bmsObject.storeUserInputs(args)) {
-            return;
-        }
-
-        bmsObject.initializeDummy();
-
-        //Thread to Run Integration Part
-        new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                do {
-
-                    try {
-                        bmsObject.executeProcessingUnit();
-                        Thread.sleep(1000);
-                    } catch (InterruptedException | ValueOutOfBoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                }
-                while ((Float) getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Float) getDataInCollection(BMS.BATTERY_LEVEL) < 100);
-            }
-
-        }.run();
-
-
-        System.out.println("\nThanks for checking out our BMS. Yo Yo!!!");
     }
 
     public void executeProcessingUnit() throws ValueOutOfBoundException {
@@ -209,6 +186,45 @@ public class BMS {
         centralStorage.put(BMS.CAR_LOAD, new Float(2));
 
         processingUnit.setCarLoad((Float) BMS.getDataInCollection(BMS.CAR_LOAD));
+    }
+    
+    
+    
+    
+    public static void main(String... args) throws NumberFormatException, InterruptedException, ValueOutOfBoundException {
+        //Declaring BMS Object
+        final BMS bmsObject = new BMS();
+
+        if (!bmsObject.storeUserInputs(args)) {
+            return;
+        }
+
+        bmsObject.initializeDummy();
+
+        //Thread to Run Integration Part
+        new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                do {
+
+                    try {
+                        bmsObject.executeProcessingUnit();
+                        Thread.sleep(1000);
+                    } catch (InterruptedException | ValueOutOfBoundException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+                while ((Float) getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Float) getDataInCollection(BMS.BATTERY_LEVEL) < 100);
+            }
+
+        }.run();
+
+
+        System.out.println("\nThanks for checking out our BMS. Yo Yo!!!");
     }
 
 }
