@@ -3,7 +3,7 @@ package soc;
 
 public class SOCLogic {
 
-    private int[] cellSoc; //charge level of cells
+    private int[] cellSoc = new int[5]; //charge level of cells
 
     private int batterySoc; // charge level of batteries
 
