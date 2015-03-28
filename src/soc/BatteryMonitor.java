@@ -6,19 +6,19 @@ import main.BMS;
 public class BatteryMonitor implements Runnable {
 
 
-    public static final String BATTERY_SOC = "BATTERY_SOC";
-    public static final String SOC_PER_CELL = " ";
+   // public static final String BATTERY_SOC = "BATTERY_SOC";
+    //public static final String SOC_PER_CELL = " ";
     // Current power the battery holds
-    public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
+   // public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 
     private SOCLogic soc;
     private CellBalanceMonitor cellBalanceMonitor;
-    private BatteryReport batteryReport;
+    //private BatteryReport batteryReport;
     private ChargeMonitor chargeMonitor;
     private ThermalMonitor thermalMonitor;
 
     public BatteryMonitor( BatteryReport batteryReport) {
-        this. batteryReport = batteryReport;
+        //this. batteryReport = batteryReport;
         this.soc  = new SOCLogic();
         this.cellBalanceMonitor = new CellBalanceMonitor(batteryReport);
         this.chargeMonitor = new ChargeMonitor(batteryReport);
@@ -34,11 +34,13 @@ public class BatteryMonitor implements Runnable {
 
 
 
-        soc.setCellCapacity( (Float ) BMS.centralStorage.get());
+        soc.setCellCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS));
+        soc.setBatteryCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS ));
         soc.setCellPower(cellPower);
         soc.setCellSoc();
         soc.setBatteryPower();
         soc.setBatterySoc();
+        thermalMonitor.setTemperature((Float ) BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
 
 
     }
@@ -62,8 +64,23 @@ public class BatteryMonitor implements Runnable {
     public void run()
     {
 
-        if ( BMS.getBMSStatus().equals(BMSState.CHARGING)){
-            //soc.cellSOC();
+        if ( BMS.getBMSStatus().equals(BMSState.CHARGING.toString())){
+            
+        }
+        else if ( BMS.getBMSStatus().equals(BMSState.ONMOVE.toString()) ){
+            //soc
+            //cellBalanceMonitor
+            //chargeMonitor
+            try {
+                soc.setCellSoc();
+                soc.setBatteryPower();
+                soc.setBatterySoc();
+                cellBalanceMonitor.checkCellBalance( soc.getCellSoc());
+                chargeMonitor.checkChargeLevel(soc.getBatterySoc());
+                thermalMonitor.checkTemperature();
+            } catch (ValueOutOfBoundException e) {
+                e.printStackTrace();
+            }
         }
 
     }

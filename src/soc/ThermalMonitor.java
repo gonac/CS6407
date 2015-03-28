@@ -2,7 +2,7 @@ package soc;
 
 import java.util.Calendar;
 import java.util.Random;
-import main.BMS;
+
 
 
 public class ThermalMonitor {
@@ -17,6 +17,7 @@ public class ThermalMonitor {
 
 
     public void checkTemperature() throws ValueOutOfBoundException {
+
         if (this.temp > 100.0) {
             throw new ValueOutOfBoundException("Temperature is higher than 100");
         } else if (this.temp >= 70.0) {
@@ -24,9 +25,10 @@ public class ThermalMonitor {
         } else if (this.temp < 0) {
             throw new ValueOutOfBoundException("Temperature is lower than 0");
         }
+        getTemperatureFromSensor();
     }
 
-    public void getTemperatureFromSensor() {
+    private void getTemperatureFromSensor() {
         /**
          * Get temperature from sensor
          */
