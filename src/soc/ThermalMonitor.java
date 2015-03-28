@@ -2,6 +2,7 @@ package soc;
 
 import java.util.Calendar;
 import java.util.Random;
+import main.BMS;
 
 
 public class ThermalMonitor {
@@ -34,7 +35,8 @@ public class ThermalMonitor {
         this.temp = rand.nextFloat() * 1000.0 - 100.0;
     }
 
-    protected void setTemperature(double temp) {
-        this.temp = temp;
+    protected void setTemperature(double temp)
+    {
+        this.temp = temp; //(Double)  BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE);
     }
 }

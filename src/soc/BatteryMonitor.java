@@ -1,17 +1,71 @@
 package soc;
 
+import main.BMSState;
+import main.BMS;
 
-public class BatteryMonitor {
+public class BatteryMonitor implements Runnable {
 
 
     public static final String BATTERY_SOC = "BATTERY_SOC";
-    public static final String SOC_PER_CELL = "SOC_PER_CELL";
+    public static final String SOC_PER_CELL = " ";
     // Current power the battery holds
     public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 
-    public BatteryMonitor() {
+    private SOCLogic soc;
+    private CellBalanceMonitor cellBalanceMonitor;
+    private BatteryReport batteryReport;
+    private ChargeMonitor chargeMonitor;
+    private ThermalMonitor thermalMonitor;
+
+    public BatteryMonitor( BatteryReport batteryReport) {
+        this. batteryReport = batteryReport;
+        this.soc  = new SOCLogic();
+        this.cellBalanceMonitor = new CellBalanceMonitor(batteryReport);
+        this.chargeMonitor = new ChargeMonitor(batteryReport);
+        this.thermalMonitor = new ThermalMonitor(batteryReport);
+
+
+        //int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity
+        float [] cellPower = new float[]{ (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) ,
+                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) };
+
+
+
+        soc.setCellCapacity( (Float ) BMS.centralStorage.get());
+        soc.setCellPower(cellPower);
+        soc.setCellSoc();
+        soc.setBatteryPower();
+        soc.setBatterySoc();
+
 
     }
+    /*
+    public static final String PRESENTCAPACITY = "currentBatteryCapacity";
+    public static final String BATTERY_LEVEL = "batteryLevel";
+    public static final String BATTERY_CHARGE_AMOUNT = "batteryChargeLevel";                    //Total charge amount in the battery, stored by Charge Group
+     public static final String CURRENT_BATTERY_TEMPERATURE = "currentBatteryTemperature";
 
+    Anoumt of power in cells
+    *public static final String CHARGE_AMOUNT_CELL1 = "chargeCell1";                            //Amount of charge in Cell 1, provided by user
+    public static final String CHARGE_AMOUNT_CELL2 = "chargeCell2";                            //Amount of charge in Cell 2, provided by user
+    public static final String CHARGE_AMOUNT_CELL3 = "chargeCell3";                            //Amount of charge in Cell 3, provided by user
+    public static final String CHARGE_AMOUNT_CELL4 = "chargeCell4";                            //Amount of charge in Cell 4, provided by user
+    public static final String CHARGE_AMOUNT_CELL5 = "chargeCell5";
+    *public static final String CURRENT_BATTERY_TEMPERATURE = "currentBatteryTemperature"
+    *
+    *
+    * */
+
+    public void run()
+    {
+
+        if ( BMS.getBMSStatus().equals(BMSState.CHARGING)){
+            //soc.cellSOC();
+        }
+
+    }
 
 }
