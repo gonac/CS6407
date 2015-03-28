@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class ThermalMonitor {
 
-    public double temp = 0;
+    private double temp = 0;
     private BatteryReport report = null;
 
 
@@ -38,7 +38,6 @@ public class ThermalMonitor {
         //Random rand = new Random(Calendar.getInstance().getTime().getTime());
         // get temp from [-100.0, 900.0]
         //this.temp += rand.nextFloat();
-    
     }
 
     protected void setTemperature(double temp)
