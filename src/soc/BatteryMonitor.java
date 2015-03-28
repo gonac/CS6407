@@ -12,7 +12,7 @@ public class BatteryMonitor extends Thread {
    // public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 
 
-    private boolean on = false;
+    private boolean on = true;
     private SOCLogic soc;
     private CellBalanceMonitor cellBalanceMonitor;
     //private BatteryReport batteryReport;
