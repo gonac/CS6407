@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class ThermalMonitor {
 
-    public double temp = 0; //remember to make private
+    public Float temp = 0f; //remember to make private
     private BatteryReport report = null;
 
 
@@ -27,7 +27,7 @@ public class ThermalMonitor {
         } else if (this.temp < 0) {
             throw new ValueOutOfBoundException("Temperature is lower than 0");
         }
-        temp += 0.5;
+        temp += 0.5f;
         BMS.centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, temp);
         getTemperatureFromSensor();
     }
@@ -41,7 +41,7 @@ public class ThermalMonitor {
         //this.temp += rand.nextFloat();
     }
 
-    protected void setTemperature(double temp)
+    protected void setTemperature(float temp)
     {
         this.temp = temp; //(Double)  BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE);
     }

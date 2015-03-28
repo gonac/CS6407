@@ -12,7 +12,7 @@ public class BatteryMonitor extends Thread {
    // public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 
 
-    private boolean on = false;
+    private boolean on = true;
     private SOCLogic soc;
     private CellBalanceMonitor cellBalanceMonitor;
     //private BatteryReport batteryReport;
@@ -38,12 +38,13 @@ public class BatteryMonitor extends Thread {
 
 
         soc.setCellCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS));
-        soc.setBatteryCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS ));
+        soc.setBatteryCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_BATTERY_CAPACITY ));
         soc.setCellPower(cellPower);
         soc.setCellSoc();
         soc.setBatteryPower();
         soc.setBatterySoc();
         thermalMonitor.setTemperature((Float ) BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
+        System.out.println("Thermal monitor : " + thermalMonitor.temp + "Memory : " + BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
 
 
     }
@@ -85,10 +86,17 @@ public class BatteryMonitor extends Thread {
                     soc.setBatterySoc();
                     cellBalanceMonitor.checkCellBalance(soc.getCellSoc());
                     chargeMonitor.checkChargeLevel(soc.getBatterySoc());
+                    
                     thermalMonitor.checkTemperature();
+                    
                 } catch (ValueOutOfBoundException e) {
                     e.printStackTrace();
                 }
+                
+            }
+            else
+            {
+            	on=false;
             }
         }
     }
