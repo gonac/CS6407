@@ -3,7 +3,7 @@ package soc;
 import main.BMSState;
 import main.BMS;
 
-public class BatteryMonitor implements Runnable {
+public class BatteryMonitor extends Thread {
 
 
    // public static final String BATTERY_SOC = "BATTERY_SOC";
@@ -65,7 +65,7 @@ public class BatteryMonitor implements Runnable {
     {
 
         if ( BMS.getBMSStatus().equals(BMSState.CHARGING.toString())){
-            
+
         }
         else if ( BMS.getBMSStatus().equals(BMSState.ONMOVE.toString()) ){
             //soc
