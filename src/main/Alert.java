@@ -1,11 +1,23 @@
 package main;
 
-public class Alert {
+public enum Alert {
 
-    public static Integer NO_ALERT = 0;
-    public static Integer ALERT_BATTERYLOW = 1;
-    public static Integer ALERT_OVERCHARGE = 2;
-    public static Integer ALERT_HIGHTEMP = 3;
-    public static Integer ALERT_DAMAGE = 4;
+    NO_ALERT(0),
+    ALERT_BATTERYLOW(1),
+    ALERT_OVERCHARGE(2),
+    ALERT_HIGHTEMP(3),
+    ALERT_DAMAGE(4);
+    
+    Alert(int type)
+    {
+    	alert_type=type;
+    }
+    
+    int alert_type;
+    
+    public int getType()
+    {
+    	return alert_type;
+    }
 
 }

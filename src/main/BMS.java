@@ -2,6 +2,9 @@ package main;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import soc.BatteryMonitor;
+import soc.BatteryReport;
+
 
 public class BMS {
 
@@ -16,6 +19,7 @@ public class BMS {
     public static final String MAXIMUM_OPERATING_TEMPERATURE = "maxOperatingTemperature";    //Max operating current provided by Manufacturer
     public static final String MINIMUM_OPERATING_TEMPERATURE = "minOperatingTemperature";    //Min operating current provided by Manufacturer
     public static final String TOTAL_BATTERY_CAPACITY = "totalBatteryCapacity";                //Total battery capacity provided by Manufacturer
+    public static final String TOTAL_CAPACITY_EACH_CELLS = "totalCapacityEachCell";				//Total capacity of each cell can hold
 
     //Data stored/updated by the system
     public static final String CHARGING_CYCLES_USED = "chargingCyclesUsed";                        //Charging cycles used by BMS, stored by Control Group
@@ -46,6 +50,7 @@ public class BMS {
 
 
     //All Groups references
+    BatteryMonitor chargeBatteryMonitor;
     ProcessingUnit processingUnit;
 
 
@@ -61,6 +66,8 @@ public class BMS {
         centralStorage.put(BMS.MINIMUM_OPERATING_CURRENT, new Float(0.5));
         centralStorage.put(BMS.MAXIMUM_OPERATING_TEMPERATURE, new Float(50));
         centralStorage.put(BMS.MINIMUM_OPERATING_TEMPERATURE, new Float(-10));
+        centralStorage.put(BMS.TOTAL_BATTERY_CAPACITY, new Float(500));
+        centralStorage.put(BMS.TOTAL_CAPACITY_EACH_CELLS, new Float((Float)this.getDataInCollection(BMS.TOTAL_BATTERY_CAPACITY)/5));
 
         centralStorage.put(BMS.CAR_SPEED, new Float(0));
         centralStorage.put(BMS.CHARGE_AMOUNT_CELL1, new Float(0));
@@ -74,7 +81,7 @@ public class BMS {
         centralStorage.put(BMS.CAR_LOAD, new Float(0));
         centralStorage.put(BMS.CHARGING_VOLTAGE, new Float(0));
         centralStorage.put(BMS.CHARGING_CYCLES_USED, new Integer(0));
-        centralStorage.put(BMS.TOTAL_BATTERY_CAPACITY, new Float(0));
+        
         centralStorage.put(BMS.PRESENTCAPACITY, new Float(0));
         centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, new Float(0));
         centralStorage.put(BMS.BATTERY_LEVEL, new Float(0));
@@ -87,8 +94,9 @@ public class BMS {
         
         
         /*Initializing object for each module*/
+        
 
-        processingUnit = new ProcessingUnit();
+        processingUnit = new ProcessingUnit(socBatteryReport);
 
     }
 
@@ -116,6 +124,8 @@ public class BMS {
 
     //Function for storing user Inputs into Memory and validating it
     public Boolean storeUserInputs(String[] args) {
+    	Float chargeRangeEachCell=(Float)this.getDataInCollection(BMS.TOTAL_CAPACITY_EACH_CELLS);
+    	
         if (args.length == 0) {
             System.err.println("Input list is missing for the run! Please provide input list.");
             return false;
@@ -127,7 +137,17 @@ public class BMS {
             } else if (Float.isNaN(Float.parseFloat(args[2])) || Float.isNaN(Float.parseFloat(args[3])) || Float.isNaN(Float.parseFloat(args[4])) || Float.isNaN(Float.parseFloat(args[5])) || Float.isNaN(Float.parseFloat(args[6]))) {
                 System.err.println("Battery Charge levels are not is correct format, please provide in numeric format for 5 battery cells!!");
                 return false;
-            } else if (Float.isNaN(Float.parseFloat(args[7]))) {
+            }
+            else if((Float.parseFloat(args[2]) < 0 || Float.parseFloat(args[2]) > chargeRangeEachCell) ||
+            		(Float.parseFloat(args[3]) < 0 || Float.parseFloat(args[3]) > chargeRangeEachCell) ||
+            		(Float.parseFloat(args[4]) < 0 || Float.parseFloat(args[4]) > chargeRangeEachCell) || 
+            		(Float.parseFloat(args[5]) < 0 || Float.parseFloat(args[5]) > chargeRangeEachCell) || 
+            		(Float.parseFloat(args[6]) < 0 || Float.parseFloat(args[6]) > chargeRangeEachCell))
+            {
+            	System.err.println("Charge level of each cell cannot be greater than 100 and cannot be less than 0. Please check and try again.");
+            	return false;
+            }
+            else if (Float.isNaN(Float.parseFloat(args[7]))) {
                 System.err.println("Battery temperature is not in correct format, please provide in numeric format!!");
                 return false;
             }

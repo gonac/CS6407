@@ -1,6 +1,9 @@
 package main;
 
-public class ProcessingUnit implements ProcessingUnitInterface{
+import soc.BatteryReport;
+import soc.ReportObservable;
+
+public class ProcessingUnit implements ProcessingUnitInterface, ReportObservable{
 
     //Defining Inputs from Sensors
     private Float kmLeftInBattery;
@@ -8,19 +11,30 @@ public class ProcessingUnit implements ProcessingUnitInterface{
     private Float nextNearestPumpDistance;
     private CarSensor cs;
     private GPSStub gps;
-    private Integer alert;
+    
+    //Alerts of Processing Unit
+    private Alert alert;
 
 
     private Float speed;
     private Float currentLoopTravelTime = (float) 1;        //Time in hours
     private Float consumptionRate;
+    
+    //Objects of Observers
+    BatteryReport batteryReportCharge;
 
 
-    ProcessingUnit() throws ValueOutOfBoundException {
+    ProcessingUnit(BatteryReport batteryReportCharge) throws ValueOutOfBoundException {
+    	
+    	//Adding reference to own class
+    	this.batteryReportCharge=batteryReportCharge;
+    	
+    	
+    	//Other required fields
         cs = new CarSensor(5.5f);
         gps = new GPSStub(200f);
         currentDistanceTraveled = 0f;
-        alert = Alert.NO_ALERT;
+        alert = main.Alert.NO_ALERT;
 
         speed = (Float) BMS.getDataInCollection(BMS.CAR_SPEED);
         consumptionRate = (Float) BMS.getDataInCollection(BMS.CAR_LOAD);
@@ -132,24 +146,46 @@ public class ProcessingUnit implements ProcessingUnitInterface{
 
 
     @Override
-    public Integer showAlerts(Integer alert) {
+    public Integer showAlerts(Alert alert) {
         // TODO Auto-generated method stub
-        if (alert == Alert.ALERT_BATTERYLOW) {
+        if ((alert.toString()).equals((Alert.ALERT_BATTERYLOW).toString())) {
             System.out.println("--------------- ALERT ------------\n\nBattery Low");
             return 1;
-        } else if (alert == Alert.ALERT_OVERCHARGE) {
+        } else if ((alert.toString()).equals((Alert.ALERT_OVERCHARGE).toString())) {
             System.out.println("--------------- ALERT ------------\n\nBattery Overcharge");
             return 2;
-        } else if (alert == Alert.ALERT_HIGHTEMP) {
+        } else if ((alert.toString()).equals((Alert.ALERT_HIGHTEMP).toString())) {
             System.out.println("--------------- ALERT ------------\n\nBattery has High Temperature");
             return 3;
-        } else if (alert == Alert.ALERT_DAMAGE) {
+        } else if ((alert.toString()).equals((Alert.ALERT_DAMAGE).toString())) {
             System.out.println("--------------- ALERT ------------\n\nBattery is damages. Please replace.");
             return 4;
         } else {
             return 0;
         }
     }
+    
+    
+    
+    
+    
+    @Override
+	public void update() {
+		if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVER_DISCHARGE))
+		{
+			alert=Alert.ALERT_BATTERYLOW;
+		}
+		else if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVERCHARGE))
+		{
+			alert=Alert.ALERT_OVERCHARGE;
+		}
+		else if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVERHEATING))
+		{
+			alert=Alert.ALERT_HIGHTEMP;
+		}		
+    	// TODO Auto-generated method stub
+		
+	}
 
 
     public void execute() {
@@ -174,7 +210,7 @@ public class ProcessingUnit implements ProcessingUnitInterface{
 
                     System.out.println("Distance to next Pump : " + nextNearestPumpDistance);
 
-                    if (alert > 0) {
+                    if (alert.getType() > 0) {
                         showAlerts(alert);
                     }
 
@@ -189,7 +225,7 @@ public class ProcessingUnit implements ProcessingUnitInterface{
                     System.out.println("Charge Amount : " + BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
                     System.out.println("Charging Cycles left : " + getChargingCyclesLeft());
 
-                    if (alert > 0) {
+                    if (alert.getType() > 0) {
                         showAlerts(alert);
                     }
 

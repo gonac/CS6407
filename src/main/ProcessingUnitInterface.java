@@ -16,7 +16,7 @@ public interface ProcessingUnitInterface {
 
     public void execute();
 
-    public Integer showAlerts(Integer alert);
+    public Integer showAlerts(Alert alert);
 
     //public void updateBatteryChargeLevelLeft(Float _distanceTravelled);
 
