@@ -63,7 +63,7 @@ public class BatteryMonitor extends Thread {
 
     public void run()
     {
-        while( true) {
+        while( true ) {
 
             if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
 
