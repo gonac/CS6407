@@ -18,7 +18,7 @@ public class SOCLogic {
 
 
     public SOCLogic() {
-
+        
     }
 
     public void setUp(int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity) {

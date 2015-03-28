@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class ThermalMonitor {
 
-    private double temp = 0;
+    public double temp = 0; //remember to make private
     private BatteryReport report = null;
 
 
