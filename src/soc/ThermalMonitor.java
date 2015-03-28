@@ -34,7 +34,7 @@ public class ThermalMonitor {
          */
         Random rand = new Random(Calendar.getInstance().getTime().getTime());
         // get temp from [-100.0, 900.0]
-        this.temp = rand.nextFloat() * 1000.0 - 100.0;
+        this.temp += rand.nextFloat();
     }
 
     protected void setTemperature(double temp)
