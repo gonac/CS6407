@@ -11,6 +11,8 @@ public class BatteryMonitor extends Thread {
     // Current power the battery holds
    // public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 
+
+    private boolean on = false;
     private SOCLogic soc;
     private CellBalanceMonitor cellBalanceMonitor;
     //private BatteryReport batteryReport;
@@ -63,14 +65,21 @@ public class BatteryMonitor extends Thread {
 
     public void run()
     {
-        while( true ) {
+        while( on ) {
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
-
+                    on = false;
             } else if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
                 //soc
                 //cellBalanceMonitor
                 //chargeMonitor
+                on = true;
                 try {
                     soc.setCellSoc();
                     soc.setBatteryPower();
