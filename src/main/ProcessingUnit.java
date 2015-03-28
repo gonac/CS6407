@@ -28,7 +28,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	
     	//Adding reference to own class
     	this.batteryReportCharge=batteryReportCharge;
-    	
+    	this.batteryReportCharge.addObserver(this);
     	
     	//Other required fields
         cs = new CarSensor(5.5f);
@@ -118,7 +118,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
     public void storeChargingBatteryLevel() {
         // TODO Auto-generated method stub
-        Float batteryLevel = (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) + 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
+        Integer batteryLevel = (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) + 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
         BMS.storeDataInCollection(BMS.BATTERY_LEVEL, batteryLevel);
     }
 
@@ -169,26 +169,27 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     
     @Override
 	public void update() {
-		if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVER_DISCHARGE))
+		if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVER_DISCHARGE).toString()))
 		{
 			alert=Alert.ALERT_BATTERYLOW;
 		}
-		else if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVERCHARGE))
+		else if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVERCHARGE).toString()))
 		{
 			alert=Alert.ALERT_OVERCHARGE;
 		}
-		else if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVERHEATING))
+		else if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVERHEATING).toString()))
 		{
 			alert=Alert.ALERT_HIGHTEMP;
-		}		
+		}
     	// TODO Auto-generated method stub
+		showAlerts(alert);
 		
 	}
 
 
     public void execute() {
         try {
-            if (alert != Alert.ALERT_DAMAGE) {
+            if (!alert.toString().equals(Alert.ALERT_DAMAGE.toString())) {
 
                 if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
 
@@ -208,7 +209,9 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
                     System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(nextNearestPumpDistance));
                     
-                    System.out.format("Battery Temperature : %.2f degree celcius",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
+                    System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
+                    
+                    System.out.println("Alert : " + alert.toString());
 
                     if (alert.getType() > 0) {
                         showAlerts(alert);
@@ -258,9 +261,9 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
             }
 
         }
-        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100);
+        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100);
     	
-    	//BMS.BMS_STATE=BMSState.IDLE;
+    	BMS.BMS_STATE=BMSState.IDLE;
     }
 
 

@@ -94,7 +94,7 @@ public class BMS {
         
         
         /*Initializing object for each module*/
-        chargeBatteryMonitor=new BatteryMonitor(socBatteryReport);
+       
 
         processingUnit = new ProcessingUnit(socBatteryReport);
 
@@ -164,6 +164,8 @@ public class BMS {
             centralStorage.put(BMS.CHARGE_AMOUNT_CELL4, Float.parseFloat(args[5]));
             centralStorage.put(BMS.CHARGE_AMOUNT_CELL5, Float.parseFloat(args[6]));
             centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, Float.parseFloat(args[7]));
+            
+            System.out.println("Temp : " + (Float)centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
 
 
             //Setting Speed to Processing unit
@@ -207,7 +209,7 @@ public class BMS {
         float batteryChargeAmount = (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) +
                 (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) +
                 (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL5);
-        centralStorage.put(BMS.BATTERY_LEVEL, new Float(50));
+        centralStorage.put(BMS.BATTERY_LEVEL, new Integer(50));
         centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryChargeAmount);
         centralStorage.put(BMS.CAR_LOAD, new Float(2));
 
@@ -224,6 +226,7 @@ public class BMS {
         if (!bmsObject.storeUserInputs(args)) {
             return;
         }
+        bmsObject.chargeBatteryMonitor=new BatteryMonitor(bmsObject.socBatteryReport);
 
         bmsObject.initializeDummy();
         
