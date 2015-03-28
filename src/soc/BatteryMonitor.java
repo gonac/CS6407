@@ -63,26 +63,26 @@ public class BatteryMonitor extends Thread {
 
     public void run()
     {
+        while( true) {
 
-        if ( BMS.getBMSStatus().equals(BMSState.CHARGING.toString())){
+            if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
 
-        }
-        else if ( BMS.getBMSStatus().equals(BMSState.ONMOVE.toString()) ){
-            //soc
-            //cellBalanceMonitor
-            //chargeMonitor
-            try {
-                soc.setCellSoc();
-                soc.setBatteryPower();
-                soc.setBatterySoc();
-                cellBalanceMonitor.checkCellBalance( soc.getCellSoc());
-                chargeMonitor.checkChargeLevel(soc.getBatterySoc());
-                thermalMonitor.checkTemperature();
-            } catch (ValueOutOfBoundException e) {
-                e.printStackTrace();
+            } else if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
+                //soc
+                //cellBalanceMonitor
+                //chargeMonitor
+                try {
+                    soc.setCellSoc();
+                    soc.setBatteryPower();
+                    soc.setBatterySoc();
+                    cellBalanceMonitor.checkCellBalance(soc.getCellSoc());
+                    chargeMonitor.checkChargeLevel(soc.getBatterySoc());
+                    thermalMonitor.checkTemperature();
+                } catch (ValueOutOfBoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
     }
 
 }
