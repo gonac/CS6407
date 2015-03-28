@@ -129,7 +129,8 @@ public class BMS {
         if (args.length == 0) {
             System.err.println("Input list is missing for the run! Please provide input list.");
             return false;
-        } else if (args[0].equalsIgnoreCase("driving") && args.length == 8) {
+        } 
+        else if (args[0].equalsIgnoreCase("driving") && args.length == 8) {
             setBMSStatus(BMSState.ONMOVE);
             if (Float.isNaN(Float.parseFloat(args[1]))) {
                 System.err.println("Speed is not is correct format, please provide in numeric format!!");
