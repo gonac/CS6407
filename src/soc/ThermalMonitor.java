@@ -9,7 +9,9 @@ import java.util.Random;
 
 public class ThermalMonitor {
 
+
     public Float temp = 0f; //remember to make private
+
     private BatteryReport report = null;
 
 
