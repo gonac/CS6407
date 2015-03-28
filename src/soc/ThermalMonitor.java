@@ -1,5 +1,7 @@
 package soc;
 
+import main.BMS;
+
 import java.util.Calendar;
 import java.util.Random;
 
@@ -25,6 +27,7 @@ public class ThermalMonitor {
         } else if (this.temp < 0) {
             throw new ValueOutOfBoundException("Temperature is lower than 0");
         }
+        BMS.centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, temp);
         getTemperatureFromSensor();
     }
 
