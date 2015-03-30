@@ -1,11 +1,17 @@
-package pg;
+package main;
 
-import static org.junit.Assert.*;
-
-import java.util.concurrent.ConcurrentHashMap;
+import static org.junit.Assert.assertEquals;
+import main.BMS;
+import main.CarSensor;
+import main.ProcessingUnit;
+import main.ValueOutOfBoundException;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import soc.BatteryMonitor;
+import soc.BatteryReport;
+import soc.SOCLogic;
 
 
 public class BMSTest1 {
@@ -14,26 +20,44 @@ public class BMSTest1 {
 	CarSensor cs;
 	ProcessingUnit unit;
 	BMS bms;
+	BatteryReport report;
+	SOCLogic soc;
+	BatteryMonitor monitor;
 	@Before
 	public void setup() throws ValueOutOfBoundException
-	{
+	{	String[] inputs = {"Driving","60","55","65","75","50","65","50"};
+		soc=new SOCLogic();
 		bms= new BMS();
-		String[] inputs = {"Driving","60","55","65","75","50","65","50"};
 		bms.storeUserInputs(inputs);
 		bms.initializeDummy();
-		unit=new ProcessingUnit();
+		
+		monitor=new BatteryMonitor(report);
+		report= new BatteryReport();
+		bms.chargeBatteryMonitor=new BatteryMonitor(bms.socBatteryReport);
+		
+		unit=new ProcessingUnit(report);
 		
 	}
 
 
 
-
+	@Test
+	public void testExec()
+	{
+		bms.executeBMSModule();
+	}
 	@Test
 	public void test8StoreInputs() throws ValueOutOfBoundException
 	{
 		String[] inputs={"Driving","60","55","65","75","50","65","50"};
 		bms.storeUserInputs(inputs);
 		
+	}
+	@Test
+	public void test8invalidSpeed()
+	{
+		String[] inputs={"Driving","2A","55","65","75","50","65","50"};
+		bms.storeUserInputs(inputs);
 	}
 	@Test
 	public void testStoreDataInCollection() {
@@ -63,7 +87,7 @@ public class BMSTest1 {
 	@Test
 	public void processing() throws ValueOutOfBoundException
 	{
-		bms.executeProcessingUnit();
+		//bms.executeProcessingUnit();
 	}
 	
 	@Test
