@@ -54,11 +54,39 @@ public class BMSTest1 {
 		
 	}
 	@Test
-	public void test8invalidSpeed()
+	public void test8invalidSpeed() throws ValueOutOfBoundException
 	{
 		String[] inputs={"Driving","2A","55","65","75","50","65","50"};
 		bms.storeUserInputs(inputs);
 	}
+	
+	@Test
+	public void test8Null() throws ValueOutOfBoundException
+	{
+		String[] inputs={"Driving",null,"55","65","75","50","65","50"};
+		assertEquals(false,bms.storeUserInputs(inputs));
+	}
+	@Test
+	public void test9inputs() throws ValueOutOfBoundException
+	{
+		String[] inputs={"charging","20","55","65","75","50","65","50","25"};
+		assertEquals(true,bms.storeUserInputs(inputs));
+	}
+	
+	@Test
+	public void test9Null() throws ValueOutOfBoundException
+	{
+		String[] inputs={"charging",null,"55","65","75","50","65","50","25"};
+		assertEquals(false,bms.storeUserInputs(inputs));
+	}
+	
+	@Test
+	public void test9Invalid() throws ValueOutOfBoundException
+	{
+		String[] inputs={"charging","NA","55","65","75","50","65","50","25"};
+		assertEquals(false,bms.storeUserInputs(inputs));
+	}
+	
 	@Test
 	public void testStoreDataInCollection() {
 		Float distance=100f ;

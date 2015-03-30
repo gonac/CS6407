@@ -46,12 +46,19 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
         return this.speed;
     }
 
-    public void setSpeed(Float _speed) {
-        speed = _speed;
+    public void setSpeed(Float _speed) throws ValueOutOfBoundException {
+        if (_speed < 0)  {
+            throw new ValueOutOfBoundException("Car speed value in Negative");
+        }
+        else
+        {speed = _speed;}
     }
 
-    public void setCarLoad(Float _carLoad) {
-        this.consumptionRate = _carLoad;
+    public void setCarLoad(Float _carLoad) throws ValueOutOfBoundException {
+       if(_carLoad<0)
+       { throw new ValueOutOfBoundException("Consumption value in Negative");}
+       else
+    	{this.consumptionRate = _carLoad;}
     }
 
     @Override
@@ -67,13 +74,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     public void setDistanceTravelledByCar() throws ValueOutOfBoundException {
         float previousDistance = (Float) BMS.getDataInCollection(BMS.DISTANCE_TRAVELLED);
 
-        if (speed < 0 || speed == null) {
-            throw new ValueOutOfBoundException("Car speed value in Negative");
-        }
-
-        if (nextNearestPumpDistance < 0) {
-            throw new ValueOutOfBoundException("Distance for next station has negative value");
-        }
 
 
         currentDistanceTraveled = (speed * currentLoopTravelTime);
@@ -90,9 +90,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
 
     public Float getDistanceLeftInBattery() throws ValueOutOfBoundException {
-        if (consumptionRate < 0) {
-            throw new ValueOutOfBoundException("Consumption rate value in Negative");
-        }
+
         Float chargeInBattery = (Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT); // Dummy Variable, need to insert the function which will get charge from Charge group
 
         return chargeInBattery / (consumptionRate);
@@ -132,10 +130,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     //Dummy Stub For Charge Group
     public void updateBatteryChargeLevelLeft(Float _distanceTravelled) throws ValueOutOfBoundException {
         // TODO Auto-generated method stub
-        if (consumptionRate < 0 || consumptionRate == null) {
-            throw new ValueOutOfBoundException("Consumption rate value in Negative");
-        }
-
         Float chargeLeft = ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT)) - (consumptionRate * _distanceTravelled);
 
         BMS.storeDataInCollection(BMS.BATTERY_CHARGE_AMOUNT, chargeLeft);
