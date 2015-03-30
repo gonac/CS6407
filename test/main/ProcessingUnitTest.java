@@ -39,7 +39,6 @@ public class ProcessingUnitTest {
 				stub=new GPSStub(0f);
 				
 				
-				
 	}
 
 	
@@ -47,23 +46,46 @@ public class ProcessingUnitTest {
 
 	@Test
 	public void boundaryPump() throws ValueOutOfBoundException
-	{unit.setDistanceTravelledByCar();}
-	
+	{
+	unit.setDistanceTravelledByCar();
+	assertEquals(60.0f,BMS.getDataInCollection(BMS.DISTANCE_TRAVELLED));
+	}	
 	@Test(expected=ValueOutOfBoundException.class)
 	public void exceptionPumpDistance() throws ValueOutOfBoundException
 	{
 		stub.setNextNearestPumpDistance(-20f);	
 	}
-	
 	@Test
 	public void normal() throws ValueOutOfBoundException
-	{stub.setNextNearestPumpDistance(10f);
-	assertEquals(10f,stub.getNextNearestPumpDistance(),0f);
-	unit.setDistanceTravelledByCar();}
+	{stub.setNextNearestPumpDistance(200f);
+	assertEquals(200f,stub.getNextNearestPumpDistance(),0f);
+	unit.setDistanceTravelledByCar();
+	unit.setDistanceTravelledByCar();
+	assertEquals(120f,BMS.getDataInCollection(BMS.DISTANCE_TRAVELLED));
+	//assertEquals(20f,stub.getNextNearestPumpDistance(),0f);
+	}
+	
+	@Test
+	public void greaterThanLeft() throws ValueOutOfBoundException
+	{
+		unit.setCarLoad(50f);
+		unit.setSpeed(150f);
+		unit.setDistanceTravelledByCar();
+		assertEquals(6.2f,unit.getDistanceLeftInBattery(),0.0f);
+	}
+	
 	@Test
 	public void atPump() throws ValueOutOfBoundException
 	{stub.setNextNearestPumpDistance(0f);
 	assertEquals(0f,stub.getNextNearestPumpDistance(),0f);}
+	
+	@Test
+	public void storeLevel()
+	{	
+		int current=(int) BMS.getDataInCollection(BMS.BATTERY_LEVEL);
+		unit.storeChargingBatteryLevel();
+		assertEquals(current+10,BMS.getDataInCollection(BMS.BATTERY_LEVEL));
+	}
 	
 	@Test
 	public void testGetSpeed() {
@@ -78,7 +100,8 @@ public class ProcessingUnitTest {
 	}
 	@Test
 	public void testGetChargingCyclesLeft() {
-		assertEquals(5000,unit.getChargingCyclesLeft(),0.0f);
+		BMS.storeDataInCollection(BMS.CHARGING_CYCLES_USED, 40);
+		assertEquals(4960,unit.getChargingCyclesLeft(),0.0f);
 	}
 	
 	@Test
@@ -124,13 +147,11 @@ public class ProcessingUnitTest {
 	public void testAlert()
 	{
 		assertEquals(1,unit.showAlerts(Alert.ALERT_BATTERYLOW).intValue());
-		unit.execute();
 		assertEquals(4,unit.showAlerts(Alert.ALERT_DAMAGE).intValue());
 		assertEquals(2,unit.showAlerts(alert.ALERT_OVERCHARGE).intValue());
 		assertEquals(3,unit.showAlerts(alert.ALERT_HIGHTEMP).intValue());
 		assertEquals(0,unit.showAlerts(alert.NO_ALERT).intValue());
 	}
-	
 	@Test
 	public void updateCharge() throws ValueOutOfBoundException
 	{
@@ -140,6 +161,7 @@ public class ProcessingUnitTest {
 		assertEquals(110f,BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
 	}
 	
+
 	@Test
 	public void setLoad() throws ValueOutOfBoundException
 	{
