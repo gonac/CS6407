@@ -8,7 +8,7 @@ import soc.ValueOutOfBoundException;
 public class SOHThread extends Thread{
 
 	SOHSystem sOHSystem;
-	public SOHThread(SOHSystem sOHSystem){
+	public SOHThread(){
 		this.sOHSystem=sOHSystem;
 	}
     public void run()
@@ -24,7 +24,7 @@ public class SOHThread extends Thread{
             if (BMS.getBMSStatus().equals(BMSState.IDLE.toString())) {
             	
             }else {
- 
+            	SOHSystem sOHSystem=new SOHSystem();
    
     			int  RULresult= sOHSystem.getRUL();
     			int  sOHresult=sOHSystem.getSOH();

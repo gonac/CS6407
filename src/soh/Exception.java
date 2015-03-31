@@ -10,4 +10,5 @@ public class Exception {
 	public static final int memoryDataWrong=-502;
 	public static final int RULOutofRange=-503;
 	public static final int SOHOutofRange=-504;
+	public static final int BATTERYDAMAGE=-400;
 }
