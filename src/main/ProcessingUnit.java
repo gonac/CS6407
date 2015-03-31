@@ -230,6 +230,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(gps.getNextNearestPumpDistance()));
                     
                     System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
+                    System.out.format("Battery Health : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_HEALTH));
                     
 
                     /*if (alert.getType() > 0) {

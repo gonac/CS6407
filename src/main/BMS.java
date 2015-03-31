@@ -102,7 +102,7 @@ public class BMS {
         socBatteryReport=new BatteryReport();
         
         sohSystem = new SOHSystem();
-        
+        sohUnit=new SOHThread(sohSystem);
         
         /*Initializing object for each module*/
          
@@ -135,7 +135,7 @@ public class BMS {
     	this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
     	
-    	//sohUnit.start();
+    	sohUnit.start();
     }
     
 
@@ -245,10 +245,6 @@ public class BMS {
         }
         bmsObject.chargeBatteryMonitor=new BatteryMonitor(bmsObject.socBatteryReport);
 		
-		
-		
-		//bmsObject.sohUnit = new SOHThread(sohSystem);
-
         bmsObject.initializeDummy();
         
         bmsObject.executeBMSModule();
