@@ -1,6 +1,6 @@
 package soh;
 
-public class expection {
+public class Exception {
 	public static final int cellOneBroken=-401;
 	public static final int cellTwoBroken=-402;
 	public static final int cellThreeBroken=-403;

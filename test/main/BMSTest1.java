@@ -29,7 +29,6 @@ public class BMSTest1 {
 		soc=new SOCLogic();
 		bms= new BMS();
 		bms.storeUserInputs(inputs);
-		bms.initializeDummy();
 		
 		monitor=new BatteryMonitor(report);
 		report= new BatteryReport();
@@ -40,7 +39,12 @@ public class BMSTest1 {
 	}
 
 
-
+	@Test
+	public void dummy() throws ValueOutOfBoundException
+	{
+		bms.initializeDummy();
+		assertEquals("2.0",BMS.getDataInCollection(BMS.CAR_LOAD).toString());
+	}
 	@Test
 	public void testExec()
 	{
@@ -48,16 +52,18 @@ public class BMSTest1 {
 	}
 	@Test
 	public void test8StoreInputs() throws ValueOutOfBoundException
-	{
-		String[] inputs={"Driving","60","55","65","75","50","65","50"};
+	{	
+		String[] inputs={"Driving","70","55","65","75","50","65","50"};
 		bms.storeUserInputs(inputs);
-		
+		assertEquals(70f,BMS.getDataInCollection(BMS.CAR_SPEED));
 	}
+	
+
 	@Test
 	public void test8invalidSpeed() throws ValueOutOfBoundException
 	{
 		String[] inputs={"Driving","2A","55","65","75","50","65","50"};
-		bms.storeUserInputs(inputs);
+		assertEquals(false,bms.storeUserInputs(inputs));
 	}
 	
 	@Test
@@ -71,6 +77,7 @@ public class BMSTest1 {
 	{
 		String[] inputs={"charging","20","55","65","75","50","65","50","25"};
 		assertEquals(true,bms.storeUserInputs(inputs));
+		assertEquals(BMSState.CHARGING.toString(),BMS.getBMSStatus());
 	}
 	
 	@Test
@@ -119,6 +126,12 @@ public class BMSTest1 {
 	}
 	
 	@Test
+	public void capacityCheck()
+	{
+		float cap= (float) BMS.getDataInCollection(BMS.TOTAL_BATTERY_CAPACITY)/5;
+		assertEquals(cap,BMS.getDataInCollection(BMS.TOTAL_CAPACITY_EACH_CELLS));
+	}
+	@Test
 	public void testZeroArgs() throws ValueOutOfBoundException
 	{
 		String test[]={};
@@ -131,6 +144,13 @@ public class BMSTest1 {
 	{
 		String test[]={"driving"};
 		assertEquals(false,	bms.storeUserInputs(test));
+	}
+	
+	@Test
+	public void testMain() throws Exception, InterruptedException, ValueOutOfBoundException
+	{
+		BMS.main("charging","52","55","65","75","50","65","50","25");
+		BMS.main("azd");
 	}
 	
 }
