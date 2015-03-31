@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import soc.BatteryMonitor;
 import soc.BatteryReport;
+import soh.SOHSystem;
+import soh.SOHThread;
 
 
 public class BMS {
@@ -55,6 +57,7 @@ public class BMS {
     //All Groups references
     BatteryMonitor chargeBatteryMonitor;
     ProcessingUnit processingUnit;
+    SOHThread sohThread;
 
 
     public BMS() throws ValueOutOfBoundException {
@@ -130,6 +133,8 @@ public class BMS {
     {
     	this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
+    	
+    	sohThread.start();
     }
     
 
@@ -238,6 +243,9 @@ public class BMS {
             return;
         }
         bmsObject.chargeBatteryMonitor=new BatteryMonitor(bmsObject.socBatteryReport);
+		float[]cellVoltage={120,120,120,120,120};
+		SOHSystem sOHSystem=new SOHSystem(cellVoltage, 50, (float) 40, 300);
+		bmsObject.sohThread = new SOHThread(sOHSystem);
 
         bmsObject.initializeDummy();
         
