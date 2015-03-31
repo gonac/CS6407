@@ -1,5 +1,6 @@
 package soc;
 
+import main.BMS;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,28 +16,28 @@ public class ThermalMonitorTest {
     public void setUp() {
         this.report = new BatteryReport();
         this.monitor = new ThermalMonitor(report);
+        try {
+            BMS bms = new BMS();
+        } catch (main.ValueOutOfBoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test
     public void testCheckTemperatureForNormalTemp() throws ValueOutOfBoundException {
 
-        monitor.setTemperature(50.0);
+        monitor.setTemperature(50.0f);
         monitor.checkTemperature();
         assertNull("CheckTemperature is not working for normal temp", report.getAlert());
 
     }
 
-    @Test(expected = ValueOutOfBoundException.class)
-    public void testCheckTemperatureForHighTemp() throws ValueOutOfBoundException {
-
-        monitor.setTemperature(111.1);
-        monitor.checkTemperature();
-    }
 
     @Test(expected = ValueOutOfBoundException.class)
     public void testCheckTemperatureForLowTemp() throws ValueOutOfBoundException {
 
-        monitor.setTemperature(-10.0);
+        monitor.setTemperature(-10.0f);
         monitor.checkTemperature();
     }
 
@@ -49,8 +50,8 @@ public class ThermalMonitorTest {
     }
 
 
-    @Test
-    public void testGetTemperature() {
-        monitor.getTemperatureFromSensor();
-    }
+//    @Test
+//    public void testGetTemperature() {
+//        monitor.getTemperatureFromSensor();
+//    }
 }

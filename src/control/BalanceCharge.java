@@ -3,10 +3,10 @@ package Battery.Control;
 //CC = 3
 import java.util.logging.Logger;
 
-import Battery.Charge.SOC;
+import soc.*;
 
 public class BalanceCharge {
-	private String cellCharges = new SOC().getCellCharges();
+	private String cellCharges = new soc().getCellCharges();
 	private String RateOfCharge;
 	int cellChargeCycles = 13;
 
