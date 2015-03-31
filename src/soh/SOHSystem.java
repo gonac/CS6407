@@ -162,9 +162,10 @@ public class SOHSystem {
 		if(result<0){
 		setStateOfBattery(result);
 		}
+		bms.centralStorage.put("batteryLife", result);
 		return result;
 	}
-
+  
 	@SuppressWarnings("static-access")
 	int getSOH() {
 		bms= new BMS();
@@ -214,6 +215,7 @@ public class SOHSystem {
 				break;
 			}
 		}
+		bms.centralStorage.put("batteryHealth", result);
 		return result;
 
 	}
