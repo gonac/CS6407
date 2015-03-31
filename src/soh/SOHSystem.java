@@ -1,9 +1,15 @@
 package soh;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import soc.ReportObservable;
+
 public class SOHSystem {
+	 
+	private ArrayList<SOHObserver> observers = new ArrayList<SOHObserver>();
+	
 	float voltage[];
 	float Temperature;
 	float Current;
@@ -15,6 +21,27 @@ public class SOHSystem {
 	float InCA_me;
 	CPUOut cpuOut;
 	SOHSystem s;
+
+	private int stateOfBattery;
+	
+	public int getStateOfBattery() {
+		return stateOfBattery;
+	}
+
+	public void setStateOfBattery(int stateOfBattery) {
+		this.stateOfBattery = stateOfBattery;
+		notifyAllObservers();
+	}
+
+	public void addObserver(SOHObserver observer) {
+	        observers.add(observer);
+	    }
+
+	    public void notifyAllObservers() {
+	        for (SOHObserver observer : observers) {
+	            observer.update();
+	        }
+	    }
 
 	public SOHSystem(float[] voltage, float Temperature, float Current, int time) {
 		// TODO Auto-generated constructor stub
@@ -87,7 +114,7 @@ public class SOHSystem {
 		BatteryOut batteryOut = this.getDataFromBattery();
 		SensorOut sensorOut = this.getDataFromSensor(batteryOut);
 		float T = sensorOut.getTemperature();
-		expection expection = new expection();
+		Exception expection = new Exception();
 		int result = 0;
 		int brokenCell = getBrokenCell();
 		if (brokenCell == 0) {
@@ -115,6 +142,7 @@ public class SOHSystem {
 			switch (brokenCell) {
 			case 1:
 				result = expection.cellOneBroken;
+				
 				break;
 
 			case 2:
@@ -131,6 +159,9 @@ public class SOHSystem {
 				break;
 			}
 		}
+		if(result<0){
+		setStateOfBattery(result);
+		}
 		return result;
 	}
 
@@ -140,7 +171,7 @@ public class SOHSystem {
 		BatteryOut batteryOut = this.getDataFromBattery();
 		SensorOut sensorOut = this.getDataFromSensor(batteryOut);
 		float T = sensorOut.getTemperature();
-		expection expection = new expection();
+		Exception expection = new Exception();
 		int result = 0;
 		int brokenCell = getBrokenCell();
 		if (brokenCell == 0) {
