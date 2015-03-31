@@ -94,7 +94,7 @@ public class BMS {
         centralStorage.put(BMS.BATTERY_LEVEL, new Integer(0));
         centralStorage.put(BMS.DISTANCE_TRAVELLED, new Float(0));
         
-        centralStorage.put(BMS.BATTERY_HEALTH, new Integer(100));
+        centralStorage.put(BMS.BATTERY_HEALTH, new Integer(0));
         centralStorage.put(BMS.BATTERY_LIFE, new Integer(0));
         
         
@@ -135,7 +135,8 @@ public class BMS {
     	this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
     	
-    	sohUnit.start();
+    	this.sohUnit.start();
+    	
     }
     
 
@@ -253,7 +254,7 @@ public class BMS {
         
 
 
-        System.out.println("\nThanks for checking out our BMS. Yo Yo!!!");
+        //System.out.println("\nThanks for checking out our BMS. Yo Yo!!!");
     }
 
 }

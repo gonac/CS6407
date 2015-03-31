@@ -36,6 +36,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	this.batteryReportCharge.addObserver(this);
     	
     	this.sohSystem = sohSystem;
+    	this.sohSystem.addObserver(this);
     	
     	//Other required fields
         cs = new CarSensor(5.5f);
@@ -111,14 +112,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     }
 
 
-    /*@Override
-    public void storeBatteryLevel() {
-        // TODO Auto-generated method stub
-        Float batteryLevel = (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) - 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
-        BMS.storeDataInCollection(BMS.BATTERY_LEVEL, batteryLevel);
-    }*/
-
-
     public void storeChargingBatteryLevel() {
         // TODO Auto-generated method stub
         Integer batteryLevel = (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) + 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
@@ -163,7 +156,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 	            System.out.println("\n\nBattery is damages. Please replace.");
 	            returnVal=4;
 	        } 
-	        System.out.println("\n--------------- ALERT Finished------------\n");
+	        System.out.println("\n---------- ALERT Finished------------\n");
 	        
     	}
     	return returnVal;
@@ -199,6 +192,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	if(this.sohSystem.getStateOfBattery()==soh.Exception.BATTERYDAMAGE)
     	{
     		alert=Alert.ALERT_DAMAGE;
+    		BMS.setBMSStatus(BMSState.DAMAGED);
     	}
     	showAlerts(alert);
 		
@@ -231,7 +225,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     
                     System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
                     System.out.format("Battery Health : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_HEALTH));
-                    
+                    System.out.format("Reamind of life : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_LIFE));
 
                     /*if (alert.getType() > 0) {
                         showAlerts(alert);
@@ -240,7 +234,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
                     System.out.println("\n------ GUI Output End -------\n\n");
                     
-                    //printSystemLog();
+                    printSystemLog();
                 } else if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
                     System.out.println("------ Presenting GUI Output -------\n");
 
@@ -256,9 +250,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
                     System.out.println("\n------ GUI Output End -------\n\n");
                 }
-            } else {
-                System.out.println("--------------- ALERT ------------\n\nBattery is damages. Please replace.");
-            }
+            } 
         } catch (ValueOutOfBoundException exception) {
             System.err.println("Exception occured 1 : " + exception.getMessage());
         } catch (Exception e) {
@@ -302,18 +294,17 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     public void run()
     {
     	do {
-    		
-    		this.execute();
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            this.execute();
 
         }
-        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100);
+        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100 && !BMS.getBMSStatus().toString().equals(BMSState.DAMAGED.toString()));
     	
     	BMS.BMS_STATE=BMSState.IDLE;
     }

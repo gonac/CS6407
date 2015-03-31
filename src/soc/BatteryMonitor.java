@@ -48,7 +48,6 @@ public class BatteryMonitor extends Thread {
         soc.setBatteryPower();
         soc.setBatterySoc();
         thermalMonitor.setTemperature((Float) BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
-        System.out.println("Thermal monitor : " + thermalMonitor.temp + "Memory : " + BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
 
 
     }
