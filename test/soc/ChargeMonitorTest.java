@@ -1,5 +1,7 @@
 package soc;
 
+import main.BMS;
+import main.BMSState;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +15,12 @@ public class ChargeMonitorTest {
     public void setUp() {
         this.report = new BatteryReport();
         this.monitor = new ChargeMonitor(report);
+        try {
+            BMS bms = new BMS();
+            BMS.setBMSStatus(BMSState.CHARGING);
+        } catch (main.ValueOutOfBoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
