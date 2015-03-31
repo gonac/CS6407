@@ -106,7 +106,6 @@ public class BatteryMonitor extends Thread {
                 } catch (ValueOutOfBoundException e) {
                     e.printStackTrace();
                 }
-                
             }
             else
             {
