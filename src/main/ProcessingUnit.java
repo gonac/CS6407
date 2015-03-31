@@ -29,7 +29,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     private SOHSystem sohSystem;
 
 
-    ProcessingUnit(BatteryReport batteryReportCharge) throws ValueOutOfBoundException {
+    ProcessingUnit(BatteryReport batteryReportCharge, SOHSystem sohSystem) throws ValueOutOfBoundException {
     	
     	//Adding reference to own class
     	this.batteryReportCharge=batteryReportCharge;
@@ -196,7 +196,11 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     @Override
 	public void updateSOH() {
 		// TODO Auto-generated method stub
-    	
+    	if(this.sohSystem.getStateOfBattery()==soh.Exception.BATTERYDAMAGE)
+    	{
+    		alert=Alert.ALERT_DAMAGE;
+    	}
+    	showAlerts(alert);
 		
 	}
     
@@ -283,7 +287,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 		
 		System.out.println("\n\nLoad/Consumption Rate:" + BMS.getDataInCollection(BMS.CAR_LOAD));
     	//Log from Health Group
-		
+		System.out.println("Battery Capacity: " + BMS.getDataInCollection(BMS.PRESENTCAPACITY));
+		System.out.println("Battery usefull health : " + BMS.getDataInCollection(BMS.BATTERY_LIFE));
     	
     	System.out.println("--------------- System Log Information Ends --------------");
     	

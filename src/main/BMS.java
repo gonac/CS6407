@@ -101,12 +101,12 @@ public class BMS {
         /*Initializing all the required objects*/
         socBatteryReport=new BatteryReport();
         
-        //sohSystem = new SOHSystem(cellVoltage);
+        sohSystem = new SOHSystem();
         
         
         /*Initializing object for each module*/
          
-        processingUnit = new ProcessingUnit(socBatteryReport);
+        processingUnit = new ProcessingUnit(socBatteryReport,sohSystem);
 
     }
 
