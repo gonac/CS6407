@@ -32,14 +32,14 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	
     	//Other required fields
         cs = new CarSensor(5.5f);
-        gps = new GPSStub(200f);
+        gps = new GPSStub(1000f);
         currentDistanceTraveled = 0f;
         alert = main.Alert.NO_ALERT;
 
         speed = (Float) BMS.getDataInCollection(BMS.CAR_SPEED);
         consumptionRate = (Float) BMS.getDataInCollection(BMS.CAR_LOAD);
 
-        nextNearestPumpDistance = 1000f;
+        nextNearestPumpDistance = gps.getNextNearestPumpDistance();
     }
 
     public Float getSpeed() {
@@ -83,6 +83,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
         BMS.storeDataInCollection(BMS.DISTANCE_TRAVELLED, (currentDistanceTraveled + previousDistance));
 
         nextNearestPumpDistance = nextNearestPumpDistance - currentDistanceTraveled;
+        gps.setNextNearestPumpDistance(nextNearestPumpDistance);
 
         //this.updateBatteryChargeLevelLeft(currentDistanceTraveled);
 
@@ -201,7 +202,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.format("Time Left for next charge : %.2f hours \n", getTimeLeftInBattery());
                     System.out.println("Charging Cycles left : " + getChargingCyclesLeft());
 
-                    System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(nextNearestPumpDistance));
+                    System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(gps.getNextNearestPumpDistance()));
                     
                     System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
                     
