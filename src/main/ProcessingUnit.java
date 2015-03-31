@@ -2,9 +2,11 @@ package main;
 
 import soc.BatteryReport;
 import soc.ReportObservable;
+import soh.SOHObserver;
+import soh.SOHSystem;
 import sun.rmi.runtime.Log;
 
-public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable {
+public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable, SOHObserver {
 
     //Defining Inputs from Sensors
     private Float kmLeftInBattery;
@@ -22,7 +24,9 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     private Float consumptionRate;
     
     //Objects of Observers
-    BatteryReport batteryReportCharge;
+    private BatteryReport batteryReportCharge;
+    
+    private SOHSystem sohSystem;
 
 
     ProcessingUnit(BatteryReport batteryReportCharge) throws ValueOutOfBoundException {
@@ -30,6 +34,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	//Adding reference to own class
     	this.batteryReportCharge=batteryReportCharge;
     	this.batteryReportCharge.addObserver(this);
+    	
+    	this.sohSystem = sohSystem;
     	
     	//Other required fields
         cs = new CarSensor(5.5f);
@@ -166,7 +172,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     
     
     
-    
+    //For implementing alert sent from Charge group
     @Override
 	public void update() {
 		if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVER_DISCHARGE).toString()))
@@ -183,6 +189,14 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 		}
     	// TODO Auto-generated method stub
 		showAlerts(alert);
+		
+	}
+    
+  //For implementing alert sent from Health group
+    @Override
+	public void updateSOH() {
+		// TODO Auto-generated method stub
+    	
 		
 	}
     
@@ -286,7 +300,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     		this.execute();
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -297,6 +311,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	
     	BMS.BMS_STATE=BMSState.IDLE;
     }
+
+	
 
 
 }

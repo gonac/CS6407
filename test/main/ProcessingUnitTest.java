@@ -1,20 +1,6 @@
 
 package main;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.concurrent.ConcurrentHashMap;
-
-import main.BMS;
-import main.GPSStub;
-import main.ProcessingUnit;
-import main.ValueOutOfBoundException;
-import org.junit.Before;
-import org.junit.Test;
-import soc.Alert;
-import soc.BatteryMonitor;
-import soc.BatteryReport;
-import soc.SOCLogic;
 
 import static org.junit.Assert.assertEquals;
 

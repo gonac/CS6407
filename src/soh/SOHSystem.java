@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import main.BMS;
 import soc.ReportObservable;
 
 public class SOHSystem {
@@ -14,7 +15,6 @@ public class SOHSystem {
 	float Temperature;
 	float Current;
 	int time;
-	static BMS bms ;
 	final static String PRESENTCAPACITY = "PRESENTCAPACITY";
 	final static String INITIALCAPACITY = "INITIALCAPACITY";
 	float PresentCapacity_me;
@@ -39,16 +39,23 @@ public class SOHSystem {
 
 	    public void notifyAllObservers() {
 	        for (SOHObserver observer : observers) {
-	            observer.update();
+	            observer.updateSOH();
 	        }
 	    }
 
-	public SOHSystem(float[] voltage, float Temperature, float Current, int time) {
+	public SOHSystem() {
 		// TODO Auto-generated constructor stub
-		this.voltage = voltage;
-		this.Current = Current;
-		this.Temperature = Temperature;
-		this.time = time;
+		
+		float [] voltageArr={(float) (Math.random()*120), (float) (Math.random()*120), (float) (Math.random()*120), 
+				(float) (Math.random()*120), (float) (Math.random()*120)};
+		this.voltage = voltageArr;
+		this.Current = (float)(Math.random()*50);
+		if(this.Current < 1)
+		{
+			this.Current = 1f;
+		}
+		this.Temperature = (Float)BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE);
+		this.time = (int)Math.random()*700;
 
 	}
 

@@ -52,12 +52,13 @@ public class BMS {
     /*Required Objects of all groups which is required for operations like adding observers
      */
     public BatteryReport socBatteryReport;							//Object for storing observers to the list, used by Charge group
+    public SOHSystem sohSystem;										//Object for storing observers to the list, used by Health group
 
 
     //All Groups references
     BatteryMonitor chargeBatteryMonitor;
     ProcessingUnit processingUnit;
-    SOHThread sohThread;
+    SOHThread sohUnit;
 
 
     public BMS() throws ValueOutOfBoundException {
@@ -100,11 +101,11 @@ public class BMS {
         /*Initializing all the required objects*/
         socBatteryReport=new BatteryReport();
         
+        //sohSystem = new SOHSystem(cellVoltage);
         
         
         /*Initializing object for each module*/
-       
-
+         
         processingUnit = new ProcessingUnit(socBatteryReport);
 
     }
@@ -134,7 +135,7 @@ public class BMS {
     	this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
     	
-    	sohThread.start();
+    	//sohUnit.start();
     }
     
 
@@ -243,9 +244,10 @@ public class BMS {
             return;
         }
         bmsObject.chargeBatteryMonitor=new BatteryMonitor(bmsObject.socBatteryReport);
-		float[]cellVoltage={120,120,120,120,120};
-		SOHSystem sOHSystem=new SOHSystem(cellVoltage, 50, (float) 40, 300);
-		bmsObject.sohThread = new SOHThread(sOHSystem);
+		
+		
+		
+		//bmsObject.sohUnit = new SOHThread(sohSystem);
 
         bmsObject.initializeDummy();
         
