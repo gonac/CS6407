@@ -1,4 +1,8 @@
+
 package soc;
+
+import main.BMSState;
+import main.BMS;
 
 import main.BMSState;
 import main.BMS;
@@ -38,12 +42,12 @@ public class BatteryMonitor extends Thread {
 
 
         soc.setCellCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS));
-        soc.setBatteryCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS ));
+        soc.setBatteryCapacity((Float) BMS.centralStorage.get(BMS.TOTAL_BATTERY_CAPACITY));
         soc.setCellPower(cellPower);
         soc.setCellSoc();
         soc.setBatteryPower();
         soc.setBatterySoc();
-        thermalMonitor.setTemperature((Float ) BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
+        thermalMonitor.setTemperature((Float) BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE));
 
 
     }
@@ -69,16 +73,14 @@ public class BatteryMonitor extends Thread {
         while( on ) {
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
-                    on = false;
-            } else if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
+                    on = true;
 
-                on = true;
                 try {
                     soc.setCellSoc();
                     soc.setBatteryPower();
@@ -89,6 +91,25 @@ public class BatteryMonitor extends Thread {
                 } catch (ValueOutOfBoundException e) {
                     e.printStackTrace();
                 }
+            } else if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
+
+                on = true;
+                try {
+                    soc.setCellSoc();
+                    soc.setBatteryPower();
+                    soc.setBatterySoc();
+                    cellBalanceMonitor.checkCellBalance(soc.getCellSoc());
+                    chargeMonitor.checkChargeLevel(soc.getBatterySoc());
+                    
+                    thermalMonitor.checkTemperature();
+                    
+                } catch (ValueOutOfBoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+            	on=false;
             }
         }
     }
