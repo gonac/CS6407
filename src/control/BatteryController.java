@@ -1,33 +1,72 @@
 package control;
+
+import main.BMS;
+import soc.Alert;
+import soc.BatteryReport;
+import soc.ReportObservable;
+
 /*CS6407 Control Team - Battery Controller
  * @author Sam O'Floinn
- * 
- * CYCLOMATIC COMPLEXITY === 6
  */
 
-public class BatteryController {
+public class BatteryController extends Thread implements ReportObservable {
 
-	public boolean vehicleOn = true;//BMS.getVehicleStatus();
-	public boolean chargerConnected = false; //BMS.chargerConnected();
-
-	public BCenum testEnum;
+	boolean vehicleOn = true;//BMS.getVehicleStatus();
+	boolean chargerConnected = false; //BMS.chargerConnected();
+	int chargeRate =  10; //must get this from somewhere
+	int loadRate = 10; //must get this from somewhere
+	String status = "UNBALANCED"; //set this to "" in the final code
 	
-	public BatteryController()
+	BatteryReport batteryReport;
+	public BatteryControlUnit bcu = new BatteryControlUnit();
+	public BCenum testEnum;
+//BMS.CHARGE_AMOUNT_CELL1
+	Cell cellOne = new Cell(20, 20, 20, 1, true);
+	Cell cellTwo = new Cell(20, 20, 20, 2, true);
+	Cell cellThree = new Cell(20, 20, 20, 3, true);
+	Cell cellFour = new Cell(20, 20, 20, 4, true);
+	Cell cellFive = new Cell(20, 20, 20, 5, true);
+	Cell[] cellArray = new Cell[]{ cellOne, cellTwo, cellThree,cellFour, cellFive};
+	
+	public BatteryController( BatteryReport batteryReport )
 	{
 		this.testEnum = BCenum.idle;
-	}
-	/*Things to test in the jUnit:
-	 * - booleans are true at certain states AND enums are at a certain value
-	 * - 
-	 */
-	public static void main(String[] args)
-	{
-		BatteryController myBC = new BatteryController();
-		myBC.joyrideInViceCity();
+		this.batteryReport = batteryReport;
+		
+		batteryReport.addObserver(this);
 	}
 	
-	synchronized public void joyrideInViceCity(){
-		//ThermalController thermal = new ThermalController(50);
+	public void update()
+	{
+		//get the alert enum from soc
+		//if alert=="UNBALANCED", then status should also be "UNBALANCED"; etc. for each alert enum.  
+		
+		status = batteryReport.getAlert().toString();
+		System.out.println("Battery status is " + status);
+		/*
+		 if ( batteryReport.getAlert().toString().equalsIgnoreCase(Alert.OVERHEATING.toString())){
+			 
+		 }*/
+	}
+	
+	public static void main(String[] args)
+	{
+		BatteryReport myReport = new BatteryReport();
+		BatteryController myBC = new BatteryController(myReport);
+		myBC.run();
+	}
+	
+	public void run()
+	{
+		BatteryController myBC = new BatteryController(batteryReport);
+		BalanceCharge chargeB = new BalanceCharge(cellArray, 10, bcu, status);
+		BalanceLoad loadB = new BalanceLoad(cellArray, 2, bcu, status);
+		ThermalController thermB = new ThermalController(status);
+		myBC.runCode(chargeB, loadB, thermB, bcu);
+	}
+	
+	synchronized public void runCode(BalanceCharge chargeB, BalanceLoad loadB, ThermalController thermB,
+			BatteryControlUnit bcu){
 		for (int i = 0; i < 3; i++)
 		{
 			switch(testEnum)
@@ -65,11 +104,13 @@ public class BatteryController {
 				case balanceCharge:
 					//balance charge, change to fit states
 					System.out.println("Balance Charge code happens now!");
+					chargeB.balanceCharge(chargeRate, cellArray);
 					
 					testEnum=testEnum.balanceTemperature;
 					
 				case balanceLoad:
 					//balance yo' load
+					loadB.balanceLoad();
 					System.out.println("Balance Load code happens now!");
 					if (chargerConnected)
 					{
@@ -84,13 +125,13 @@ public class BatteryController {
 					break;
 					
 				case balanceTemperature:
-					//someone get this hothead outta here
 					System.out.println("Balance Temperature code happens now!" +
 							"\nMoving from balanceTemp to active.");
-					chargerConnected=false;
+					thermB.balanceTemperature();
+					/*chargerConnected=false;
 					vehicleOn = false;
 					
-					testEnum=testEnum.active;
+					testEnum=testEnum.active; */
 					break;
 			}
 		}

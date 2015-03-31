@@ -2,15 +2,18 @@ package main;
 
 import soc.BatteryReport;
 import soc.ReportObservable;
+import soh.SOHObserver;
+import soh.SOHSystem;
+import sun.rmi.runtime.Log;
 
-public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable {
+public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable, SOHObserver {
 
     //Defining Inputs from Sensors
     private Float kmLeftInBattery;
     private Float currentDistanceTraveled;        //This is the distance that Car traveled in current session
     private Float nextNearestPumpDistance;
     private CarSensor cs;
-    private GPSStub gps;
+    public GPSStub gps;
     
     //Alerts of Processing Unit
     private Alert alert;
@@ -21,37 +24,49 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     private Float consumptionRate;
     
     //Objects of Observers
-    BatteryReport batteryReportCharge;
+    private BatteryReport batteryReportCharge;
+    
+    private SOHSystem sohSystem;
 
 
-    ProcessingUnit(BatteryReport batteryReportCharge) throws ValueOutOfBoundException {
+    ProcessingUnit(BatteryReport batteryReportCharge, SOHSystem sohSystem) throws ValueOutOfBoundException {
     	
     	//Adding reference to own class
     	this.batteryReportCharge=batteryReportCharge;
+    	this.batteryReportCharge.addObserver(this);
     	
+    	this.sohSystem = sohSystem;
+    	this.sohSystem.addObserver(this);
     	
     	//Other required fields
         cs = new CarSensor(5.5f);
-        gps = new GPSStub(200f);
+        gps = new GPSStub(1000f);
         currentDistanceTraveled = 0f;
-        alert = main.Alert.NO_ALERT;
+        alert = Alert.NO_ALERT;
 
         speed = (Float) BMS.getDataInCollection(BMS.CAR_SPEED);
         consumptionRate = (Float) BMS.getDataInCollection(BMS.CAR_LOAD);
 
-        nextNearestPumpDistance = 1000f;
+        nextNearestPumpDistance = gps.getNextNearestPumpDistance();
     }
 
     public Float getSpeed() {
         return this.speed;
     }
 
-    public void setSpeed(Float _speed) {
-        speed = _speed;
+    public void setSpeed(Float _speed) throws ValueOutOfBoundException {
+        if (_speed < 0)  {
+            throw new ValueOutOfBoundException("Car speed value in Negative");
+        }
+        else
+        {speed = _speed;}
     }
 
-    public void setCarLoad(Float _carLoad) {
-        this.consumptionRate = _carLoad;
+    public void setCarLoad(Float _carLoad) throws ValueOutOfBoundException {
+       if(_carLoad<0)
+       { throw new ValueOutOfBoundException("Consumption value in Negative");}
+       else
+    	{this.consumptionRate = _carLoad;}
     }
 
     @Override
@@ -67,13 +82,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     public void setDistanceTravelledByCar() throws ValueOutOfBoundException {
         float previousDistance = (Float) BMS.getDataInCollection(BMS.DISTANCE_TRAVELLED);
 
-        if (speed < 0 || speed == null) {
-            throw new ValueOutOfBoundException("Car speed value in Negative");
-        }
-
-        if (nextNearestPumpDistance < 0) {
-            throw new ValueOutOfBoundException("Distance for next station has negative value");
-        }
 
 
         currentDistanceTraveled = (speed * currentLoopTravelTime);
@@ -83,6 +91,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
         BMS.storeDataInCollection(BMS.DISTANCE_TRAVELLED, (currentDistanceTraveled + previousDistance));
 
         nextNearestPumpDistance = nextNearestPumpDistance - currentDistanceTraveled;
+        gps.setNextNearestPumpDistance(nextNearestPumpDistance);
 
         //this.updateBatteryChargeLevelLeft(currentDistanceTraveled);
 
@@ -90,9 +99,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
 
     public Float getDistanceLeftInBattery() throws ValueOutOfBoundException {
-        if (consumptionRate < 0) {
-            throw new ValueOutOfBoundException("Consumption rate value in Negative");
-        }
+
         Float chargeInBattery = (Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT); // Dummy Variable, need to insert the function which will get charge from Charge group
 
         return chargeInBattery / (consumptionRate);
@@ -100,25 +107,14 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
 
     public Float getTimeLeftInBattery() throws ValueOutOfBoundException {
-        if (speed < 0) {
-            throw new ValueOutOfBoundException("Car speed value in Negative");
-        }
         Float distanceLeft = getDistanceLeftInBattery(); // Dummy Variable, need to insert the function which will get charge from Charge group
         return (distanceLeft) / (speed);
     }
 
 
-    /*@Override
-    public void storeBatteryLevel() {
-        // TODO Auto-generated method stub
-        Float batteryLevel = (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) - 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
-        BMS.storeDataInCollection(BMS.BATTERY_LEVEL, batteryLevel);
-    }*/
-
-
     public void storeChargingBatteryLevel() {
         // TODO Auto-generated method stub
-        Float batteryLevel = (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) + 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
+        Integer batteryLevel = (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) + 10;    // Dummy Variable, need to insert the function which will get battery level from charge group
         BMS.storeDataInCollection(BMS.BATTERY_LEVEL, batteryLevel);
     }
 
@@ -132,10 +128,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     //Dummy Stub For Charge Group
     public void updateBatteryChargeLevelLeft(Float _distanceTravelled) throws ValueOutOfBoundException {
         // TODO Auto-generated method stub
-        if (consumptionRate < 0 || consumptionRate == null) {
-            throw new ValueOutOfBoundException("Consumption rate value in Negative");
-        }
-
         Float chargeLeft = ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT)) - (consumptionRate * _distanceTravelled);
 
         BMS.storeDataInCollection(BMS.BATTERY_CHARGE_AMOUNT, chargeLeft);
@@ -146,54 +138,77 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     @Override
     public Integer showAlerts(Alert alert) {
         // TODO Auto-generated method stub
-        if ((alert.toString()).equals((Alert.ALERT_BATTERYLOW).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery Low");
-            return 1;
-        } else if ((alert.toString()).equals((Alert.ALERT_OVERCHARGE).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery Overcharge");
-            return 2;
-        } else if ((alert.toString()).equals((Alert.ALERT_HIGHTEMP).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery has High Temperature");
-            return 3;
-        } else if ((alert.toString()).equals((Alert.ALERT_DAMAGE).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery is damages. Please replace.");
-            return 4;
-        } else {
-            return 0;
-        }
+    	int returnVal=0;
+    	if(alert.getType()>0)
+    	{
+    		
+    		System.out.println("\n--------------- ALERT ------------");
+	        if ((alert.toString()).equals((Alert.ALERT_BATTERYLOW).toString())) {
+	            System.out.println("\n\nBattery Low");
+	            returnVal=1;
+	        } else if ((alert.toString()).equals((Alert.ALERT_OVERCHARGE).toString())) {
+	            System.out.println("\n\nBattery Overcharge");
+	            returnVal=2;
+	        } else if ((alert.toString()).equals((Alert.ALERT_HIGHTEMP).toString())) {
+	            System.out.println("\n\nBattery has High Temperature");
+	            returnVal=3;
+	        } else if ((alert.toString()).equals((Alert.ALERT_DAMAGE).toString())) {
+	            System.out.println("\n\nBattery is damages. Please replace.");
+	            returnVal=4;
+	        } 
+	        System.out.println("\n---------- ALERT Finished------------\n");
+	        
+    	}
+    	return returnVal;
     }
     
     
     
     
-    
+    //For implementing alert sent from Charge group
     @Override
 	public void update() {
-		if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVER_DISCHARGE))
+		if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVER_DISCHARGE).toString()))
 		{
 			alert=Alert.ALERT_BATTERYLOW;
 		}
-		else if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVERCHARGE))
+		else if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVERCHARGE).toString()))
 		{
 			alert=Alert.ALERT_OVERCHARGE;
 		}
-		else if((this.batteryReportCharge.getAlert().toString()).equals(soc.Alert.OVERHEATING))
+		else if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVERHEATING).toString()))
 		{
 			alert=Alert.ALERT_HIGHTEMP;
-		}		
+		}
     	// TODO Auto-generated method stub
+		showAlerts(alert);
 		
 	}
+    
+  //For implementing alert sent from Health group
+    @Override
+	public void updateSOH() {
+		// TODO Auto-generated method stub
+    	if(this.sohSystem.getStateOfBattery()==soh.Exception.BATTERYDAMAGE)
+    	{
+    		alert=Alert.ALERT_DAMAGE;
+    		BMS.setBMSStatus(BMSState.DAMAGED);
+    	}
+    	showAlerts(alert);
+		
+	}
+    
+    
 
 
     public void execute() {
         try {
-            if (alert != Alert.ALERT_DAMAGE) {
+            if (!alert.toString().equals(Alert.ALERT_DAMAGE.toString())) {
 
                 if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
 
 
-                    System.out.println("------ Presenting GUI Output -------\n");
+                    System.out.println("\n\n------ Presenting GUI Output -------\n");
 
                     //storeBatteryLevel();
                     setDistanceTravelledByCar();
@@ -206,16 +221,20 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.format("Time Left for next charge : %.2f hours \n", getTimeLeftInBattery());
                     System.out.println("Charging Cycles left : " + getChargingCyclesLeft());
 
-                    System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(nextNearestPumpDistance));
+                    System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(gps.getNextNearestPumpDistance()));
                     
-                    System.out.format("Battery Temperature : %.2f degree celcius",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
+                    System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
+                    System.out.format("Battery Health : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_HEALTH));
+                    System.out.format("Reamind of life : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_LIFE));
 
-                    if (alert.getType() > 0) {
+                    /*if (alert.getType() > 0) {
                         showAlerts(alert);
-                    }
+                    }*/
 
 
                     System.out.println("\n------ GUI Output End -------\n\n");
+                    
+                    printSystemLog();
                 } else if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
                     System.out.println("------ Presenting GUI Output -------\n");
 
@@ -225,15 +244,13 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.println("Charge Amount : " + BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
                     System.out.println("Charging Cycles left : " + getChargingCyclesLeft());
 
-                    if (alert.getType() > 0) {
+                    /*if (alert.getType() > 0) {
                         showAlerts(alert);
-                    }
+                    }*/
 
                     System.out.println("\n------ GUI Output End -------\n\n");
                 }
-            } else {
-                System.out.println("--------------- ALERT ------------\n\nBattery is damages. Please replace.");
-            }
+            } 
         } catch (ValueOutOfBoundException exception) {
             System.err.println("Exception occured 1 : " + exception.getMessage());
         } catch (Exception e) {
@@ -243,25 +260,56 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     }
     
     
+    
+    //Function to print Log information of the system
+    public void printSystemLog()
+    {
+    	System.out.println("--------------- System Log Information --------------");
+    	
+    	//Log from Charge Group
+    	
+    		
+    	
+    	//Log from Control Group
+    	System.out.println("Charge for each Cell in the battery");
+			System.out.println("\tCell 1: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1));
+			System.out.println("\tCell 2: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2));
+			System.out.println("\tCell 3: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3));
+			System.out.println("\tCell 4: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4));
+			System.out.println("\tCell 5: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5));
+		
+		System.out.println("\n\nLoad/Consumption Rate:" + BMS.getDataInCollection(BMS.CAR_LOAD));
+    	//Log from Health Group
+		System.out.println("Battery Capacity: " + BMS.getDataInCollection(BMS.PRESENTCAPACITY));
+		System.out.println("Battery usefull health : " + BMS.getDataInCollection(BMS.BATTERY_LIFE));
+    	
+    	System.out.println("--------------- System Log Information Ends --------------");
+    	
+    }
+    
+    
+    
+    
     @Override
     public void run()
     {
     	do {
-    		
-    		this.execute();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            this.execute();
 
         }
-        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Float) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100);
+        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100 && !BMS.getBMSStatus().toString().equals(BMSState.DAMAGED.toString()));
     	
-    	//BMS.BMS_STATE=BMSState.IDLE;
+    	BMS.BMS_STATE=BMSState.IDLE;
     }
+
+	
 
 
 }
