@@ -211,7 +211,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     
                     System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
                     
-                    System.out.println("Alert : " + alert.toString());
 
                     if (alert.getType() > 0) {
                         showAlerts(alert);
