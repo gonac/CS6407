@@ -1,6 +1,8 @@
-package pg;
+package main;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import main.CarSensor;
+import main.ValueOutOfBoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,10 +14,10 @@ public class CarSensorTest {
 	{	
 		float speed=0;
 		float _consumptionRate=0;
-		CarSensor cs2=cs = new CarSensor(_consumptionRate,speed);
+		CarSensor cs2=cs = new CarSensor(_consumptionRate);
 		speed=52;
 		_consumptionRate=42;
-		cs = new CarSensor(_consumptionRate,speed);
+		cs = new CarSensor(_consumptionRate);
 		
 	}
 
@@ -25,31 +27,7 @@ public class CarSensorTest {
 		assertEquals(42,cs.getConsumputionRate(),0.0f);
 	}
 
-	@Test
-	public void testUpdateCarSpeed() throws ValueOutOfBoundException {
-		//test1
-		float speed=52f;
-		cs.updateCarSpeed(speed);
-		assertEquals(speed,cs.getCarSpeed(), 0.0f);
 
-	}
-	
-	@Test
-	public void testBoundaryUpdate() throws ValueOutOfBoundException {
-		float speed=0f;
-		cs.updateCarSpeed(speed);
-		assertEquals(speed,cs.getCarSpeed(), 0.0f);
-
-	}
-	
-	@Test(expected=ValueOutOfBoundException.class)
-	public void exceptionSpeed() throws ValueOutOfBoundException
-	{
-		float speed=-52;
-		cs.updateCarSpeed(speed);
-		assertEquals(speed,cs.getCarSpeed(),0.0f);
-
-	}
 
 
 	@Test
@@ -80,7 +58,7 @@ public class CarSensorTest {
 	{
 		Float test=null;
 		cs.updateConsumptionRate(test);
-		assertEquals(test,cs.getConsumputionRate(),0.0f);
+		//assertEquals(test,cs.getConsumputionRate(),0.0f);
 	}
 
 }

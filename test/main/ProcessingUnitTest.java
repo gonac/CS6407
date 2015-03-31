@@ -1,30 +1,41 @@
-package pg;
+package main;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.ConcurrentHashMap;
+
+import main.BMS;
+import main.GPSStub;
+import main.ProcessingUnit;
+import main.ValueOutOfBoundException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import pg.BMS;
-import pg.ProcessingUnit;
+import soc.BatteryMonitor;
+import soc.BatteryReport;
+import soc.SOCLogic;
 public class ProcessingUnitTest {
 	public static ConcurrentHashMap<String, Object> centralStorage;	
 	ProcessingUnit unit;
 	BMS bms;
 	Alert alert;
 	GPSStub stub;
+	BatteryReport report;
+	SOCLogic soc;
+	BatteryMonitor monitor;
 	//CarSensor cs;
 	@Before
 	public void setup() throws ValueOutOfBoundException
 	{	
 				bms = new BMS();
-				alert = new Alert();
 				String[] inputs = {"Driving","60","55","65","75","50","65","50"};
 				bms.storeUserInputs(inputs);
 				bms.initializeDummy();
-				unit = new ProcessingUnit();
+				monitor=new BatteryMonitor(report);
+				report= new BatteryReport();
+				bms.chargeBatteryMonitor=new BatteryMonitor(bms.socBatteryReport);	
+				unit = new ProcessingUnit(report);
 				stub=new GPSStub(0f);
 				
 				
@@ -112,13 +123,12 @@ public class ProcessingUnitTest {
 	@Test
 	public void testAlert()
 	{
-		assertEquals(0,unit.showAlerts(-1).intValue());
+		assertEquals(1,unit.showAlerts(Alert.ALERT_BATTERYLOW).intValue());
 		unit.execute();
-		assertEquals(0,unit.showAlerts(0).intValue());
-		assertEquals(1,unit.showAlerts(alert.ALERT_BATTERYLOW).intValue());
+		assertEquals(4,unit.showAlerts(Alert.ALERT_DAMAGE).intValue());
 		assertEquals(2,unit.showAlerts(alert.ALERT_OVERCHARGE).intValue());
 		assertEquals(3,unit.showAlerts(alert.ALERT_HIGHTEMP).intValue());
-		assertEquals(4,unit.showAlerts(alert.ALERT_DAMAGE).intValue());
+		assertEquals(0,unit.showAlerts(alert.NO_ALERT).intValue());
 	}
 	
 	@Test

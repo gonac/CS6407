@@ -128,7 +128,7 @@ public class BMS {
     
 
     //Function for storing user Inputs into Memory and validating it
-    public Boolean storeUserInputs(String[] args) {
+    public Boolean storeUserInputs(String[] args) throws ValueOutOfBoundException {
     	Float chargeRangeEachCell=(Float)this.getDataInCollection(BMS.TOTAL_CAPACITY_EACH_CELLS);
     	
         if (args.length == 0) {
@@ -137,25 +137,23 @@ public class BMS {
         } 
         else if (args[0].equalsIgnoreCase("driving") && args.length == 8) {
             setBMSStatus(BMSState.ONMOVE);
-            if (Float.isNaN(Float.parseFloat(args[1]))) {
-                System.err.println("Speed is not is correct format, please provide in numeric format!!");
-                return false;
-            } else if (Float.isNaN(Float.parseFloat(args[2])) || Float.isNaN(Float.parseFloat(args[3])) || Float.isNaN(Float.parseFloat(args[4])) || Float.isNaN(Float.parseFloat(args[5])) || Float.isNaN(Float.parseFloat(args[6]))) {
-                System.err.println("Battery Charge levels are not is correct format, please provide in numeric format for 5 battery cells!!");
-                return false;
+            try{
+            	Float.parseFloat(args[1]);
+            Float.parseFloat(args[2]);
+            Float.parseFloat(args[3]);
+            Float.parseFloat(args[4]);
+            Float.parseFloat(args[5]);
+            Float.parseFloat(args[6]);
+            Float.parseFloat(args[7]);
+            	}
+            catch (NumberFormatException e)
+            {	
+           	System.out.println("Exception in inputs!!");
+            	return false;	
             }
-            else if((Float.parseFloat(args[2]) < 0 || Float.parseFloat(args[2]) > chargeRangeEachCell) ||
-            		(Float.parseFloat(args[3]) < 0 || Float.parseFloat(args[3]) > chargeRangeEachCell) ||
-            		(Float.parseFloat(args[4]) < 0 || Float.parseFloat(args[4]) > chargeRangeEachCell) || 
-            		(Float.parseFloat(args[5]) < 0 || Float.parseFloat(args[5]) > chargeRangeEachCell) || 
-            		(Float.parseFloat(args[6]) < 0 || Float.parseFloat(args[6]) > chargeRangeEachCell))
+            catch (NullPointerException e)
             {
-            	System.err.println("Charge level of each cell cannot be greater than 100 and cannot be less than 0. Please check and try again.");
-            	return false;
-            }
-            else if (Float.isNaN(Float.parseFloat(args[7]))) {
-                System.err.println("Battery temperature is not in correct format, please provide in numeric format!!");
-                return false;
+         	   return false;
             }
             centralStorage.put(BMS.CAR_SPEED, Float.parseFloat(args[1]));
             centralStorage.put(BMS.CHARGE_AMOUNT_CELL1, Float.parseFloat(args[2]));
@@ -174,19 +172,24 @@ public class BMS {
             return true;
         } else if (args[0].equalsIgnoreCase("charging") && args.length == 9) {
             setBMSStatus(BMSState.CHARGING);
-
-            if (Float.isNaN(Float.parseFloat(args[1])) || Float.isNaN(Float.parseFloat(args[2])) || Float.isNaN(Float.parseFloat(args[3])) || Float.isNaN(Float.parseFloat(args[4])) || Float.isNaN(Float.parseFloat(args[5]))) {
-                System.err.println("Battery Charge levels are not is correct format, please provide in numeric format for 5 battery cells!!");
-                return false;
-            } else if (Float.isNaN(Float.parseFloat(args[6]))) {
-                System.err.println("Battery temperature is not in correct format, please provide in numeric format!!");
-                return false;
-            } else if (Float.isNaN(Float.parseFloat(args[7]))) {
-                System.err.println("Battery charging current is not in correct format, please provide in numeric format!!");
-                return false;
-            } else if (Float.isNaN(Float.parseFloat(args[8]))) {
-                System.err.println("Battery charging voltage is not in correct format, please provide in numeric format!!");
-                return false;
+            try{
+        	Float.parseFloat(args[1]);
+            Float.parseFloat(args[2]);
+            Float.parseFloat(args[3]);
+            Float.parseFloat(args[4]);
+            Float.parseFloat(args[5]);
+            Float.parseFloat(args[6]);
+            Float.parseFloat(args[7]);
+            Float.parseFloat(args[8]);
+            	}
+            catch (NumberFormatException e)
+            {	
+           	System.out.println("Exception in inputs!!");
+            	return false;	
+            }
+            catch (NullPointerException e)
+            {
+         	   return false;
             }
             centralStorage.put(BMS.CHARGE_AMOUNT_CELL1, Float.parseFloat(args[1]));
             centralStorage.put(BMS.CHARGE_AMOUNT_CELL2, Float.parseFloat(args[2]));
@@ -198,14 +201,16 @@ public class BMS {
             centralStorage.put(BMS.CHARGING_VOLTAGE, Float.parseFloat(args[8]));
 
             return true;
-        } else {
+        } 
+        
+        else {
             System.err.println("Either undefined Mode entered or input list is wrong! Please check your inputs and enter MODE either as 'Charging' or 'Driving'.");
             return false;
         }
     }
 
     //Dummy Function to store values needed to run system
-    public void initializeDummy() {
+    public void initializeDummy() throws ValueOutOfBoundException {
         float batteryChargeAmount = (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) +
                 (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) +
                 (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL5);
