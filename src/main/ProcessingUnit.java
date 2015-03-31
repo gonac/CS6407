@@ -180,6 +180,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 		showAlerts(alert);
 		
 	}
+    
+    
 
 
     public void execute() {
