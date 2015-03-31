@@ -5,11 +5,8 @@ public class GPSStub {
     private Float nextNearestPumpDistance;        //Distance in Kilo Meters
 
     GPSStub(Float distance) throws ValueOutOfBoundException {
-        if (distance < 0) {
-            throw new ValueOutOfBoundException("Distance for next station has negative value");
-        }
-        else
-        {nextNearestPumpDistance = distance;}
+       
+        nextNearestPumpDistance = distance;
     }
 
     public Float getNextNearestPumpDistance() {

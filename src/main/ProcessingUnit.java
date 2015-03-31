@@ -10,7 +10,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     private Float currentDistanceTraveled;        //This is the distance that Car traveled in current session
     private Float nextNearestPumpDistance;
     private CarSensor cs;
-    private GPSStub gps;
+    public GPSStub gps;
     
     //Alerts of Processing Unit
     private Alert alert;
@@ -99,9 +99,6 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 
 
     public Float getTimeLeftInBattery() throws ValueOutOfBoundException {
-        if (speed < 0) {
-            throw new ValueOutOfBoundException("Car speed value in Negative");
-        }
         Float distanceLeft = getDistanceLeftInBattery(); // Dummy Variable, need to insert the function which will get charge from Charge group
         return (distanceLeft) / (speed);
     }
