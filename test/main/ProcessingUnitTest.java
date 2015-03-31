@@ -61,7 +61,7 @@ public class ProcessingUnitTest {
 	}
 	
 	@Test
-	public void greaterThanLeft() throws ValueOutOfBoundException
+	public void testDistBattery() throws ValueOutOfBoundException
 	{	
 		unit.setCarLoad(20f);
 		unit.setSpeed(150f);
@@ -73,14 +73,9 @@ public class ProcessingUnitTest {
 	
 	@Test
 	public void atPump() throws ValueOutOfBoundException
-	{stub.setNextNearestPumpDistance(0f);
-	assertEquals(1000f,unit.gps.getNextNearestPumpDistance(),0f);}
+	{unit.gps.setNextNearestPumpDistance(0f);
+	assertEquals(0f,unit.gps.getNextNearestPumpDistance(),0f);}
 	
-	@Test
-	public void chargeBattery()
-	{
-		
-	}
 	@Test
 	public void testObservableAlerts()
 	{	
@@ -96,11 +91,6 @@ public class ProcessingUnitTest {
 		report.setAlert(Alert.UNBALANCED);
 		unit.update();
 		assertEquals(Alert.UNBALANCED,report.getAlert());
-		
-	}
-	@Test
-	public void testWrongObservable()
-	{
 		
 	}
 	
@@ -127,13 +117,6 @@ public class ProcessingUnitTest {
 	public void testGetChargingCyclesLeft() {
 		BMS.storeDataInCollection(BMS.CHARGING_CYCLES_USED, 40);
 		assertEquals(4960,unit.getChargingCyclesLeft(),0.0f);
-	}
-	
-	@Test
-	public void setSpeed() throws ValueOutOfBoundException
-	{
-		unit.setSpeed(20f);
-		assertEquals(20f,unit.getSpeed(),0f);
 	}
 	
 	@Test(expected=ValueOutOfBoundException.class)
@@ -176,7 +159,7 @@ public class ProcessingUnitTest {
 	
 
 	@Test
-	public void testAlert()
+	public void testLocalAlert()
 	{
 		assertEquals(1,unit.showAlerts(main.Alert.ALERT_BATTERYLOW).intValue());
 		assertEquals(4,unit.showAlerts(main.Alert.ALERT_DAMAGE).intValue());

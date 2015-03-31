@@ -51,14 +51,13 @@ public class CarSensorTest {
 	{
 		Float test=-63f;
 		cs.updateConsumptionRate(test);
-		assertEquals(test,cs.getConsumputionRate(),0.0f);
+	//	assertEquals(test,cs.getConsumputionRate(),0.0f);
 	}
 	@Test(expected=NullPointerException.class)
 	public void nullConsumption() throws ValueOutOfBoundException
 	{
 		Float test=null;
 		cs.updateConsumptionRate(test);
-		//assertEquals(test,cs.getConsumputionRate(),0.0f);
 	}
 
 }

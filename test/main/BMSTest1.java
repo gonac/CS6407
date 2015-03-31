@@ -53,9 +53,9 @@ public class BMSTest1 {
 	@Test
 	public void test8StoreInputs() throws ValueOutOfBoundException
 	{	
-		String[] inputs={"Driving","70","55","65","75","50","65","50"};
+		String[] inputs={"Driving","60","55","65","75","50","65","50"};
 		bms.storeUserInputs(inputs);
-		assertEquals(70f,BMS.getDataInCollection(BMS.CAR_SPEED));
+		assertEquals(60f,BMS.getDataInCollection(BMS.CAR_SPEED));
 	}
 	
 
@@ -109,8 +109,8 @@ public class BMSTest1 {
 	@Test
 	public void setStatus()
 	{
-		BMS.setBMSStatus(BMS.BMS_STATE.ONMOVE);
-		assertEquals(BMS.BMS_STATE.ONMOVE.toString(), BMS.getBMSStatus());
+		BMS.setBMSStatus(BMS.BMS_STATE.CHARGING);
+		assertEquals(BMS.BMS_STATE.CHARGING.toString(), BMS.getBMSStatus());
 	}
 	
 	@Test
@@ -119,11 +119,6 @@ public class BMSTest1 {
 		assertEquals(0,BMS.getDataInCollection(BMS.CHARGING_CYCLES_USED));
 	}
 	
-	@Test
-	public void processing() throws ValueOutOfBoundException
-	{
-		//bms.executeProcessingUnit();
-	}
 	
 	@Test
 	public void capacityCheck()
@@ -146,11 +141,11 @@ public class BMSTest1 {
 		assertEquals(false,	bms.storeUserInputs(test));
 	}
 	
-	@Test
+	/*@Test
 	public void testMain() throws Exception, InterruptedException, ValueOutOfBoundException
 	{
 		BMS.main("charging","52","55","65","75","50","65","50","25");
 		BMS.main("azd");
-	}
+	}*/
 	
 }
