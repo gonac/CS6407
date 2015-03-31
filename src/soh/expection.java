@@ -1,6 +1,6 @@
 package soh;
 
-public class Exception {
+public class expection {
 	public static final int cellOneBroken=-401;
 	public static final int cellTwoBroken=-402;
 	public static final int cellThreeBroken=-403;
@@ -10,6 +10,4 @@ public class Exception {
 	public static final int memoryDataWrong=-502;
 	public static final int RULOutofRange=-503;
 	public static final int SOHOutofRange=-504;
-
-	public static final int BATTERYDAMAGE=-400;
 }

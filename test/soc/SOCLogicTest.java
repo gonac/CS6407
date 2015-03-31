@@ -62,5 +62,4 @@ public class SOCLogicTest {
         assertEquals(245, socLogic.calcBatteryPower(), 0.1);
     }
 
-
 }
