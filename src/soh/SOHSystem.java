@@ -16,7 +16,7 @@ public class SOHSystem {
 	float Current;
 	int time;
 
-	final static String INITIALCAPACITY = "INITIALCAPACITY";
+	
 	float PresentCapacity_me;
 	float InCA_me;
 	CPUOut cpuOut;
@@ -103,17 +103,17 @@ public class SOHSystem {
 		float InCA = memoryOut.getInitialCapacity();
 //		float PresentCapacity = 15000;
 //		float InCA = 18000;
-		BMS.storeDataInCollection("currentBatteryCapacity", PresentCapacity);
-		BMS.storeDataInCollection(INITIALCAPACITY, InCA);
+		BMS.storeDataInCollection(BMS.PRESENTCAPACITY, PresentCapacity);
+		BMS.storeDataInCollection(BMS.TOTAL_BATTERY_CAPACITY, InCA);
 	}
 
 	@SuppressWarnings("static-access")
 	void getDataFromCPU() {
 
 		 PresentCapacity_me = (float) BMS
-				 .getDataInCollection("currentBatteryCapacity");
+				 .getDataInCollection(BMS.PRESENTCAPACITY);
 		 InCA_me = (float) BMS
-				 .getDataInCollection(INITIALCAPACITY);
+				 .getDataInCollection(BMS.TOTAL_BATTERY_CAPACITY);
 
 	}
 
