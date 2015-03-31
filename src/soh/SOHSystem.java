@@ -15,7 +15,7 @@ public class SOHSystem {
 	float Temperature;
 	float Current;
 	int time;
-	final static String PRESENTCAPACITY = "PRESENTCAPACITY";
+
 	final static String INITIALCAPACITY = "INITIALCAPACITY";
 	float PresentCapacity_me;
 	float InCA_me;
@@ -103,7 +103,7 @@ public class SOHSystem {
 		float InCA = memoryOut.getInitialCapacity();
 //		float PresentCapacity = 15000;
 //		float InCA = 18000;
-		BMS.storeDataInCollection(PRESENTCAPACITY, PresentCapacity);
+		BMS.storeDataInCollection("currentBatteryCapacity", PresentCapacity);
 		BMS.storeDataInCollection(INITIALCAPACITY, InCA);
 	}
 
@@ -111,7 +111,7 @@ public class SOHSystem {
 	void getDataFromCPU() {
 
 		 PresentCapacity_me = (float) BMS
-				 .getDataInCollection(PRESENTCAPACITY);
+				 .getDataInCollection("currentBatteryCapacity");
 		 InCA_me = (float) BMS
 				 .getDataInCollection(INITIALCAPACITY);
 
