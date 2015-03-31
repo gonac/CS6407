@@ -15,7 +15,7 @@ public class SOHSystem {
 	float Temperature;
 	float Current;
 	int time;
-	final static String PRESENTCAPACITY = "PRESENTCAPACITY";
+
 	final static String INITIALCAPACITY = "INITIALCAPACITY";
 	float PresentCapacity_me;
 	float InCA_me;
@@ -70,6 +70,7 @@ public class SOHSystem {
 		for (int i = 0; i < voltage.length; i++) {
 			if  (voltage[i]<=0 || voltage[i] > 120) {
 				broken = i + 1;
+				notifyAllObservers();
 				break;
 			}
 		}
@@ -102,22 +103,23 @@ public class SOHSystem {
 		float InCA = memoryOut.getInitialCapacity();
 //		float PresentCapacity = 15000;
 //		float InCA = 18000;
-		bms.centralStorage.put(PRESENTCAPACITY, PresentCapacity);
-		bms.centralStorage.put(INITIALCAPACITY, InCA);
+		BMS.storeDataInCollection("currentBatteryCapacity", PresentCapacity);
+		BMS.storeDataInCollection(INITIALCAPACITY, InCA);
 	}
 
 	@SuppressWarnings("static-access")
 	void getDataFromCPU() {
 
-		 PresentCapacity_me = (float) bms.centralStorage
-				.get(PRESENTCAPACITY);
-		 InCA_me = (float) bms.centralStorage.get(INITIALCAPACITY);
+		 PresentCapacity_me = (float) BMS
+				 .getDataInCollection("currentBatteryCapacity");
+		 InCA_me = (float) BMS
+				 .getDataInCollection(INITIALCAPACITY);
 
 	}
 
 	@SuppressWarnings("static-access")
 	int getRUL() {
-		bms= new BMS();
+	
 		BatteryOut batteryOut = this.getDataFromBattery();
 		SensorOut sensorOut = this.getDataFromSensor(batteryOut);
 		float T = sensorOut.getTemperature();
@@ -169,13 +171,13 @@ public class SOHSystem {
 		if(result<0){
 		setStateOfBattery(result);
 		}
-		bms.centralStorage.put("batteryLife", result);
+		BMS.storeDataInCollection("batteryLife", result);
 		return result;
 	}
   
 	@SuppressWarnings("static-access")
 	int getSOH() {
-		bms= new BMS();
+	
 		BatteryOut batteryOut = this.getDataFromBattery();
 		SensorOut sensorOut = this.getDataFromSensor(batteryOut);
 		float T = sensorOut.getTemperature();
@@ -205,24 +207,24 @@ public class SOHSystem {
 		} else {
 			switch (brokenCell) {
 			case 1:
-				result = expection.cellOneBroken;
+				result = expection.BATTERYDAMAGE;
 				break;
 
 			case 2:
-				result = expection.cellTwoBroken;
+				result = expection.BATTERYDAMAGE;
 				break;
 			case 3:
-				result = expection.cellThreeBroken;
+				result = expection.BATTERYDAMAGE;
 				break;
 			case 4:
-				result = expection.cellFourBroken;
+				result = expection.BATTERYDAMAGE;
 				break;
 			case 5:
-				result = expection.cellFiveeBroken;
+				result = expection.BATTERYDAMAGE;
 				break;
 			}
 		}
-		bms.centralStorage.put("batteryHealth", result);
+		BMS.storeDataInCollection("batteryHealth", result);
 		return result;
 
 	}
