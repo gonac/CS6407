@@ -128,7 +128,7 @@ public class SOHSystem {
 		int brokenCell = getBrokenCell();
 		if (brokenCell == 0) {
 
-			if (T <= 70 && T >= 30) {
+		
 
 				this.storeDataToMemory(sensorOut);
 				getDataFromCPU();
@@ -144,9 +144,8 @@ public class SOHSystem {
 				} else {
 					result = expection.memoryDataWrong;
 				}
-			} else {
-				result = expection.temperatureFail;
-			}
+			
+			
 		} else {
 			switch (brokenCell) {
 			case 1:
@@ -186,7 +185,6 @@ public class SOHSystem {
 		int brokenCell = getBrokenCell();
 		if (brokenCell == 0) {
 
-			if (T <= 70 && T >= 30) {
 
 				this.storeDataToMemory(sensorOut);
 				getDataFromCPU();
@@ -201,9 +199,7 @@ public class SOHSystem {
 				} else {
 					result = expection.memoryDataWrong;
 				}
-			} else {
-				result = expection.temperatureFail;
-			}
+		
 		} else {
 			switch (brokenCell) {
 			case 1:
