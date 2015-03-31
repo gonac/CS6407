@@ -37,6 +37,9 @@ public class BMS {
     public static final String CURRENT_BATTERY_TEMPERATURE = "currentBatteryTemperature";    //Current battery temperature, provided by user
     public static final String CAR_SPEED = "carSpeed";                                        //Car speed, provided by user
     public static final String CAR_LOAD = "carLoad";                                            //Load on car battery, stored by Control Group
+    
+    public static final String BATTERY_HEALTH = "batteryHealth";							//Storing overall Battery health from health Group
+    public static final String BATTERY_LIFE = "batteryLife";								//Storing battery life in days from health group
 
     //BMS State
 
@@ -86,6 +89,9 @@ public class BMS {
         centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, new Float(0));
         centralStorage.put(BMS.BATTERY_LEVEL, new Integer(0));
         centralStorage.put(BMS.DISTANCE_TRAVELLED, new Float(0));
+        
+        centralStorage.put(BMS.BATTERY_HEALTH, new Integer(100));
+        centralStorage.put(BMS.BATTERY_LIFE, new Integer(0));
         
         
         /*Initializing all the required objects*/

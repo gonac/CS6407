@@ -2,6 +2,7 @@ package main;
 
 import soc.BatteryReport;
 import soc.ReportObservable;
+import sun.rmi.runtime.Log;
 
 public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable {
 
@@ -240,6 +241,18 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     e.getMessage());
         }
     }
+    
+    
+    
+    //Function to print Log information of the system
+    public void printSystemLog()
+    {
+    	System.out.println("--------------- System Log Information --------------");
+    	System.out.println("--------------- System Log Information Ends --------------");
+    	
+    }
+    
+    
     
     
     @Override
