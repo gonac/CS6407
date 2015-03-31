@@ -25,7 +25,6 @@ public class CellBalanceMonitor {
                 // so just give the position of the first cell we found
                 unbalancedCellPos = i;
                 report.setAlert(Alert.UNBALANCED);
-                report.setCellPosition(getUnbalancedCell());
                 break;
             }
         }

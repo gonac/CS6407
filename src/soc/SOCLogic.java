@@ -18,7 +18,7 @@ public class SOCLogic {
 
 
     public SOCLogic() {
-        
+
     }
 
     public void setUp(int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity) {
@@ -94,7 +94,7 @@ public class SOCLogic {
     public void setBatterySoc( ) {
         try {
             this.batterySoc = batterySOC();
-            BMS.centralStorage.put(BMS.BATTERY_LEVEL, batterySoc);
+            //BMS.centralStorage.put(BMS.BATTERY_LEVEL, batterySoc);
         } catch (ValueOutOfBoundException e) {
             e.printStackTrace();
         }
@@ -125,7 +125,7 @@ public class SOCLogic {
 
     public void setBatteryPower() {
         this.batteryPower = calcBatteryPower();
-        BMS.centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryPower);
+        //BMS.centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryPower);
     }
 
     public float[] getCellPower() {

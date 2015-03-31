@@ -8,7 +8,6 @@ public class BatteryReport {
     private ArrayList<ReportObservable> observers = new ArrayList<ReportObservable>();
 
     private Alert alert = null;
-    private int cellPosition;
 
 
     public Alert getAlert() {
@@ -28,13 +27,5 @@ public class BatteryReport {
         for (ReportObservable observer : observers) {
             observer.update();
         }
-    }
-
-    public int getCellPosition() {
-        return cellPosition;
-    }
-
-    public void setCellPosition(int cellPosition) {
-        this.cellPosition = cellPosition;
     }
 }
