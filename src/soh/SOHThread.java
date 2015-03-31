@@ -28,8 +28,8 @@ public class SOHThread extends Thread{
    
     			int  RULresult= sOHSystem.getRUL();
     			int  sOHresult=sOHSystem.getSOH();
-    			System.out.println(sOHresult);
-    			System.out.println(RULresult);	
+//    			System.out.println(sOHresult);
+//    			System.out.println(RULresult);	
 			}
 
 

@@ -145,13 +145,13 @@ public class BMS {
             setBMSStatus(BMSState.ONMOVE);
             try{
             	Float.parseFloat(args[1]);
-            Float.parseFloat(args[2]);
-            Float.parseFloat(args[3]);
-            Float.parseFloat(args[4]);
-            Float.parseFloat(args[5]);
-            Float.parseFloat(args[6]);
-            Float.parseFloat(args[7]);
-            	}
+	            Float.parseFloat(args[2]);
+	            Float.parseFloat(args[3]);
+	            Float.parseFloat(args[4]);
+	            Float.parseFloat(args[5]);
+	            Float.parseFloat(args[6]);
+	            Float.parseFloat(args[7]);
+            }
             catch (NumberFormatException e)
             {	
            	System.out.println("Exception in inputs!!");

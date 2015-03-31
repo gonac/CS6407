@@ -139,21 +139,28 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     @Override
     public Integer showAlerts(Alert alert) {
         // TODO Auto-generated method stub
-        if ((alert.toString()).equals((Alert.ALERT_BATTERYLOW).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery Low");
-            return 1;
-        } else if ((alert.toString()).equals((Alert.ALERT_OVERCHARGE).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery Overcharge");
-            return 2;
-        } else if ((alert.toString()).equals((Alert.ALERT_HIGHTEMP).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery has High Temperature");
-            return 3;
-        } else if ((alert.toString()).equals((Alert.ALERT_DAMAGE).toString())) {
-            System.out.println("--------------- ALERT ------------\n\nBattery is damages. Please replace.");
-            return 4;
-        } else {
-            return 0;
-        }
+    	int returnVal=0;
+    	if(alert.getType()>0)
+    	{
+    		
+    		System.out.println("\n--------------- ALERT ------------");
+	        if ((alert.toString()).equals((Alert.ALERT_BATTERYLOW).toString())) {
+	            System.out.println("\n\nBattery Low");
+	            returnVal=1;
+	        } else if ((alert.toString()).equals((Alert.ALERT_OVERCHARGE).toString())) {
+	            System.out.println("\n\nBattery Overcharge");
+	            returnVal=2;
+	        } else if ((alert.toString()).equals((Alert.ALERT_HIGHTEMP).toString())) {
+	            System.out.println("\n\nBattery has High Temperature");
+	            returnVal=3;
+	        } else if ((alert.toString()).equals((Alert.ALERT_DAMAGE).toString())) {
+	            System.out.println("\n\nBattery is damages. Please replace.");
+	            returnVal=4;
+	        } 
+	        System.out.println("\n--------------- ALERT Finished------------\n");
+	        
+    	}
+    	return returnVal;
     }
     
     
@@ -189,7 +196,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                 if (BMS.getBMSStatus().equals(BMSState.ONMOVE.toString())) {
 
 
-                    System.out.println("------ Presenting GUI Output -------\n");
+                    System.out.println("\n\n------ Presenting GUI Output -------\n");
 
                     //storeBatteryLevel();
                     setDistanceTravelledByCar();
@@ -207,12 +214,14 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
                     
 
-                    if (alert.getType() > 0) {
+                    /*if (alert.getType() > 0) {
                         showAlerts(alert);
-                    }
+                    }*/
 
 
                     System.out.println("\n------ GUI Output End -------\n\n");
+                    
+                    //printSystemLog();
                 } else if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
                     System.out.println("------ Presenting GUI Output -------\n");
 
@@ -222,9 +231,9 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.println("Charge Amount : " + BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
                     System.out.println("Charging Cycles left : " + getChargingCyclesLeft());
 
-                    if (alert.getType() > 0) {
+                    /*if (alert.getType() > 0) {
                         showAlerts(alert);
-                    }
+                    }*/
 
                     System.out.println("\n------ GUI Output End -------\n\n");
                 }
@@ -245,6 +254,23 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     public void printSystemLog()
     {
     	System.out.println("--------------- System Log Information --------------");
+    	
+    	//Log from Charge Group
+    	
+    		
+    	
+    	//Log from Control Group
+    	System.out.println("Charge for each Cell in the battery");
+			System.out.println("\tCell 1: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1));
+			System.out.println("\tCell 2: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2));
+			System.out.println("\tCell 3: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3));
+			System.out.println("\tCell 4: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4));
+			System.out.println("\tCell 5: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5));
+		
+		System.out.println("\n\nLoad/Consumption Rate:" + BMS.getDataInCollection(BMS.CAR_LOAD));
+    	//Log from Health Group
+		
+    	
     	System.out.println("--------------- System Log Information Ends --------------");
     	
     }
@@ -260,7 +286,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     		this.execute();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
