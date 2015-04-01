@@ -141,7 +141,7 @@ public class BMS {
     public void executeBMSModule()
     {
     	this.controlUnit.start();
-    	this.chargeBatteryMonitor.start();
+    	//this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
     	
     	this.sohUnit.start();

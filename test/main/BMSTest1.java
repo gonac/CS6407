@@ -52,11 +52,7 @@ public class BMSTest1 {
 	{
 		
 	}
-	@Test
-	public void testExec()
-	{
-		bms.executeBMSModule();
-	}
+
 	@Test
 	public void test8StoreInputs() throws ValueOutOfBoundException
 	{	

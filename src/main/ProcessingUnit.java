@@ -66,7 +66,10 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
        if(_carLoad<0)
        { throw new ValueOutOfBoundException("Consumption value in Negative");}
        else
-    	{this.consumptionRate = _carLoad;}
+    	{
+    	   this.consumptionRate = _carLoad;
+    	   cs.updateConsumptionRate(_carLoad);
+    	}
     }
 
     @Override
@@ -181,6 +184,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 			alert=Alert.ALERT_HIGHTEMP;
 		}
     	// TODO Auto-generated method stub
+		System.out.println("Alert " + alert.toString() + " \n Status : " + BMS.BMS_STATE.toString());
 		showAlerts(alert);
 		
 	}
@@ -194,6 +198,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     		alert=Alert.ALERT_DAMAGE;
     		BMS.setBMSStatus(BMSState.DAMAGED);
     	}
+    	
     	showAlerts(alert);
 		
 	}

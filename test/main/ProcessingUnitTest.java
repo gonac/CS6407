@@ -73,8 +73,8 @@ public class ProcessingUnitTest {
 		unit.setCarLoad(20f);
 		unit.setSpeed(150f);
 		unit.setDistanceTravelledByCar();
-		assertEquals(984.5,unit.gps.getNextNearestPumpDistance(),0.0f);
-		assertEquals(15.5f,unit.getDistanceLeftInBattery(),0.0f);
+		assertEquals(986.25,unit.gps.getNextNearestPumpDistance(),0.0f);
+		assertEquals(13.75f,unit.getDistanceLeftInBattery(),0.0f);
 		
 	}
 	
@@ -154,13 +154,13 @@ public class ProcessingUnitTest {
 	@Test
 	public void testGetDistanceLeftInBattery() throws ValueOutOfBoundException {
 		//chargeInBattery/(consumptionRate)=155
-		assertEquals(155,unit.getDistanceLeftInBattery(),0.0f);
+		assertEquals(137.5,unit.getDistanceLeftInBattery(),0.0f);
 	}
 
 	@Test
 	public void testGetTimeLeftInBattery() throws ValueOutOfBoundException {
 		//(distanceLeft)/(speed)=2.58
-		assertEquals(2.58,unit.getTimeLeftInBattery(),0.1f);
+		assertEquals(2.58,unit.getTimeLeftInBattery(),0.3f);
 	}
 	
 
@@ -192,7 +192,7 @@ public class ProcessingUnitTest {
 		Float distanceTravelled=100f;
 		unit.updateBatteryChargeLevelLeft(distanceTravelled);
 		//(BMS.BATTERY_CHARGE_AMOUNT)) - (consumptionRate*_distanceTravelled)
-		assertEquals(110f,BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
+		assertEquals(75f,BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
 	}
 	
 

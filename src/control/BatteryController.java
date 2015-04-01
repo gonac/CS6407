@@ -91,8 +91,7 @@ public class BatteryController extends Thread implements ReportObservable {
 	
 	synchronized public void runCode(BalanceCharge chargeB, BalanceLoad loadB, ThermalController thermB,
 			BatteryControlUnit bcu){
-		for (int i = 0; i < 3; i++)
-		{
+		
 			switch(BMS.BMS_STATE.getStateValue())
 			{
 				//Idle state
@@ -124,7 +123,7 @@ public class BatteryController extends Thread implements ReportObservable {
 					loadB.balanceLoad();
 
 					thermB.balanceTemperature();
-					System.err.println("Balance Load code happens now!");
+					System.out.println("Balance Load code happens now 1!");
 					if (chargerConnected)
 					{
 						System.out.println("Moving from balanceLoad to balanceCharge.");
@@ -145,6 +144,5 @@ public class BatteryController extends Thread implements ReportObservable {
 					testEnum=testEnum.active; 
 					break;*/
 			}
-		}
 	} 
 }
