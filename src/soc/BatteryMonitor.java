@@ -76,6 +76,7 @@ public class BatteryMonitor extends Thread {
 
         for ( int i = 0; i < cellData.length; i++ ){
             if ( cellData[i]  < 0 ){
+                cellData[i] = 0;
             }
             cellData[i] = 0;
             numberOfBadCells++;
