@@ -27,6 +27,7 @@ public class SOHThread extends Thread{
 			
             try {
                 Thread.sleep(5000);
+                sOHSystem=new SOHSystem();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
