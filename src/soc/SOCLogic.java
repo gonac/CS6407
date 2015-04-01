@@ -61,7 +61,7 @@ public class SOCLogic {
         for (int i = 0; i < cellPower.length; i++) {
             this.cellSoc[i] = (int) ((cellPower[i] / cellCapacity) * 100);
             if (cellSoc[i] > 100)
-                cellSoc[i]=100;//throw new ValueOutOfBoundException("Value out of bounds");
+                cellSoc[i] = 100;//throw new ValueOutOfBoundException("Value out of bounds");
         }
         return cellSoc;
     }
@@ -70,7 +70,7 @@ public class SOCLogic {
 
     public int batterySOC() throws ValueOutOfBoundException {
 
-        int batterySOC = (int) ((batteryPower / batteryCapacity) * 100);
+        int batterySOC = (int) ((getBatteryPower() / batteryCapacity) * 100);
         if (batterySOC > 100)
              batterySOC = 100;//throw new ValueOutOfBoundException("Value out of bounds");
         BMS.centralStorage.put(BMS.BATTERY_LEVEL, batterySOC);
@@ -130,8 +130,5 @@ public class SOCLogic {
         BMS.centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryPower);
     }
 
-    public float[] getCellPower() {
-        return cellPower;
-    }
 }
 

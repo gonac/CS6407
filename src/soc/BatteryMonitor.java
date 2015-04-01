@@ -66,12 +66,24 @@ public class BatteryMonitor extends Thread {
     
     private float[] getCellData()
     {
-    	 return new float[]{ (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+        int numberOfBadCells = 0;
+        float [] cellData;
+        cellData =  new float[]{ (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
                 (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) ,
                 (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
                 (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
                 (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) };
 
+        for ( int i = 0; i < cellData.length; i++ ){
+            if ( cellData[i]  < 0 ){
+            }
+            cellData[i] = 0;
+            numberOfBadCells++;
+        }
+
+        on = !(numberOfBadCells == cellData.length);
+
+        return cellData;
     }
 
     public void run()
@@ -109,7 +121,6 @@ public class BatteryMonitor extends Thread {
                     soc.setBatterySoc();
                     cellBalanceMonitor.checkCellBalance(soc.getCellSoc());
                     chargeMonitor.checkChargeLevel(soc.getBatterySoc());
-                    
                     thermalMonitor.checkTemperature();
                     
                 } catch (ValueOutOfBoundException e) {
