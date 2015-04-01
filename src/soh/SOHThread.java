@@ -15,7 +15,7 @@ public class SOHThread extends Thread{
     {
         boolean on = true;
 		while( on ) {
-		
+
 			if(sOHSystem.checkBatteryStatus()==Exception.BATTERYDAMAGE)
 			{
 				sOHSystem.setStateOfBattery(Exception.BATTERYDAMAGE);
@@ -27,7 +27,6 @@ public class SOHThread extends Thread{
 			
             try {
                 Thread.sleep(5000);
-            	sOHSystem=new SOHSystem();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
