@@ -78,22 +78,22 @@ public class SOHSystem {
 			} else if (i == 0
 					&& (Float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) < 0) {
 				broken++;
-			} else if (i == 0
+			} else if (i == 1
 					&& (Float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) < 0) {
 				broken++;
-			} else if (i == 0
+			} else if (i == 2
 					&& (Float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) < 0) {
 				broken++;
-			} else if (i == 0
+			} else if (i == 3
 					&& (Float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) < 0) {
 				broken++;
-			} else if (i == 0
+			} else if (i == 4
 					&& (Float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5) < 0) {
 				broken++;
 			}
 
 		}
-
+		
 		return broken;
 
 	}
@@ -163,14 +163,10 @@ public class SOHSystem {
 
 		} else {
 			result = expection.BATTERYDAMAGE;
-			
-			
+			this.setStateOfBattery(result);
 			return result;
 		}
-
-		if (result < 0) {
-			setStateOfBattery(result);
-		}
+		
 		BMS.storeDataInCollection(BMS.BATTERY_LIFE, result);
 		return result;
 	}
@@ -200,7 +196,7 @@ public class SOHSystem {
 
 		else {
 			result = expection.BATTERYDAMAGE;
-			
+			this.setStateOfBattery(result);
 			return result;
 		}
 

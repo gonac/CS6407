@@ -183,6 +183,11 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 		{
 			alert=Alert.ALERT_HIGHTEMP;
 		}
+//		else if((this.batteryReportCharge.getAlert()).toString().equals(soc.Alert.BATTERY_EMPTY))
+//		{
+//			alert=Alert.ALERT_BATTERYEXAUSTED;
+//			BMS.setBMSStatus(BMSState.DAMAGED);
+//		}
     	// TODO Auto-generated method stub
 		System.out.println("Alert " + alert.toString() + " \n Status : " + BMS.BMS_STATE.toString());
 		showAlerts(alert);
