@@ -50,6 +50,7 @@ public class SOCLogic {
 
             batteryPower += cellPower[i];
         }
+        BMS.centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryPower);
         return batteryPower;
     }
 
@@ -72,7 +73,7 @@ public class SOCLogic {
         int batterySOC = (int) ((batteryPower / batteryCapacity) * 100);
         if (batterySOC > 100)
             throw new ValueOutOfBoundException("Value out of bounds");
-
+        BMS.centralStorage.put(BMS.BATTERY_LEVEL, batterySOC);
         return batterySOC;
     }
 

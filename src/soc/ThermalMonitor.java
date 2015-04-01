@@ -27,8 +27,7 @@ public class ThermalMonitor {
         } else if (this.temp < 0) {
             throw new ValueOutOfBoundException("Temperature is lower than 0");
         }
-        temp += 0.5f;
-        BMS.centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, temp);
+
         getTemperatureFromSensor();
     }
 
@@ -36,9 +35,10 @@ public class ThermalMonitor {
         /**
          * Get temperature from sensor
          */
-        //Random rand = new Random(Calendar.getInstance().getTime().getTime());
+        Random rand = new Random(Calendar.getInstance().getTime().getTime());
         // get temp from [-100.0, 900.0]
-        //this.temp += rand.nextFloat();
+        this.temp += rand.nextFloat();
+        BMS.centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, temp);
     }
 
     protected void setTemperature(float temp)
