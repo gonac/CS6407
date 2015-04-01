@@ -2,11 +2,22 @@ package control;
 
 import java.util.Random;
 
+import main.BMS;
+import soc.BatteryReport;
 import soc.CellBalanceMonitor;
 import control.ControlAlert;
 import control.ControlReport;
 
 public class BatteryControlUnit {
+	
+	BatteryReport batteryReport;
+	
+	
+	BatteryControlUnit(BatteryReport batteryReport)
+	{
+		this.batteryReport=batteryReport;
+		
+	}
 	
 	public Cell[] limpHome(Cell[] cellMatrix) {
 		int numWorkingCells = 0;
@@ -73,26 +84,40 @@ public class BatteryControlUnit {
 			for (int i = 0; i < cellLoadBalanceMatrix.length; i++) {
 				//System.out.println("Cell " + i + " has voltage "
 				//		+ cellLoadBalanceMatrix[i].getVoltage());
-				cellLoadBalanceMatrix[i].downVoltage(loadPerCell);
+				cellLoadBalanceMatrix[i].downCharge(loadPerCell);
 	//			System.out.println("Cell " + i + " was reduced to"
 //						+ cellLoadBalanceMatrix[i].getVoltage());
 			}
 			return "Balanced load done!";
 		} else {
-			int unbalancedCell = CellBalanceMonitor.getUnbalancedCell(); // random number between 1 and 5
-			int cellToShareLoad = 1;
+			int unbalancedCell = this.batteryReport.getUnbalancedCell(); // random number between 1 and 5
+			int cellToShareLoad = 0;
+			float cellCharges[] = {(float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1), (float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2), 
+									(float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3), (float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4), 
+									(float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5)};
+			float temp=cellCharges[0];
+			
+			for(int i=1;i<5;i++)
+			{
+				if(temp<cellCharges[i])
+				{
+					temp=cellCharges[i];
+					cellToShareLoad=i;
+				}
+			}
+			
 			for (int i = 0; i < cellLoadBalanceMatrix.length; i++) {
 				if (i == cellToShareLoad) {
 	//				System.out
 		//					.println("Cell " + i + " is receiving extra load");
-					cellLoadBalanceMatrix[i].downVoltage(loadPerCell + 2);
+					cellLoadBalanceMatrix[i].downCharge(loadPerCell + 2);
 				} else if (i == unbalancedCell) {
 	//				System.out.println("Cell " + i
 	//						+ " is unbalanced and is receiving less load");
-					cellLoadBalanceMatrix[i].downVoltage(loadPerCell - 2);
+					cellLoadBalanceMatrix[i].downCharge(loadPerCell - 2);
 				} else {
 	//				System.out.println("Reducing the voltage of cell " + i);
-					cellLoadBalanceMatrix[i].downVoltage(loadPerCell);
+					cellLoadBalanceMatrix[i].downCharge(loadPerCell);
 				}
 	//			System.out.println("Cell " + i + " now has a voltage of "
 //						+ cellLoadBalanceMatrix[i].getVoltage());
@@ -117,10 +142,10 @@ public class BatteryControlUnit {
 			report.setAlert(ControlAlert.CHARGING);
 			if (!(balance.equals("UNBALANCED"))) {
 				for (int i = 0; i < cellMatrix.length; i++) {
-					if (cellMatrix[i].getVoltage() <= (voltageLimit + rateOfCharge)) {
+					if (cellMatrix[i].getCharge() <= (voltageLimit + rateOfCharge)) {
 //						System.out.println("Cell " + i + " has voltage "
 //								+ cellMatrix[i].getVoltage());
-						cellMatrix[i].upVoltage(rateOfCharge);
+						cellMatrix[i].upCharge(rateOfCharge);
 //						System.out.println("Cell " + i + " was increased to"
 //								+ cellMatrix[i].getVoltage());
 
@@ -145,15 +170,15 @@ public class BatteryControlUnit {
 				Cell cellToShare = cellMatrix[cellIdToShare];
 
 				for (int i = 0; i < cellMatrix.length; i++) {
-					if (cellMatrix[i].getVoltage() <= (voltageLimit + rateOfCharge)) {
+					if (cellMatrix[i].getCharge() <= (voltageLimit + rateOfCharge)) {
 //						System.out.println("Cell " + i + ": voltage "
 //								+ cellMatrix[i].getVoltage());
 						if (cellMatrix[i] == unbalancedCell) {
-							cellMatrix[i].upVoltage(rateOfCharge + 2);
+							cellMatrix[i].upCharge(rateOfCharge + 2);
 						} else if (cellMatrix[i] == cellToShare) {
-							cellMatrix[i].upVoltage(rateOfCharge - 2);
+							cellMatrix[i].upCharge(rateOfCharge - 2);
 						} else {
-							cellMatrix[i].upVoltage(rateOfCharge);
+							cellMatrix[i].upCharge(rateOfCharge);
 						}
 					}
 				}

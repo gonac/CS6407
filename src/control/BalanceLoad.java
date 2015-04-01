@@ -35,11 +35,11 @@ public class BalanceLoad {
 		bcu.balanceLoad(cellArray, status);
 		
 		//update the cell charge values in the main memory
-		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL1, (float)(cellArray[0].getVoltage()));
-		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL2, (float)(cellArray[1].getVoltage()));
-		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL3, (float)(cellArray[2].getVoltage()));
-		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL4, (float)(cellArray[3].getVoltage()));
-		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL5, (float)(cellArray[4].getVoltage()));
+		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL1, (float)(cellArray[0].getCharge()));
+		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL2, (float)(cellArray[1].getCharge()));
+		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL3, (float)(cellArray[2].getCharge()));
+		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL4, (float)(cellArray[3].getCharge()));
+		BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL5, (float)(cellArray[4].getCharge()));
 		
 		System.out.println("After load: Cell arrays now have a charge of "
 				+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) + ", "

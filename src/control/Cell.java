@@ -1,26 +1,26 @@
 package control;
 
 public class Cell {
-	int voltage;
-	int temperature;
+	float charge;
+	float temperature;
 	int current;
 	int id;
 	boolean working;
 	
-	public Cell(int voltage,int Temperature,int Current, int id, boolean working){
-		this.voltage=voltage;
+	public Cell(float charge,float Temperature,int Current, int id, boolean working){
+		this.charge=charge;
 	 	this.current=Current;
 	 	this.temperature=Temperature;
 	 	this.id=id;
 	 	this.working=working;
 	}
 	
-	//energy = time * current. do we need a public float getEnergy() to return voltage / current; ?
+	//energy = time * current. do we need a public float getEnergy() to return charge / current; ?
 
-	public int getVoltage() {
-		return voltage;
+	public float getCharge() {
+		return charge;
 	}
-	public int getTemperature() {
+	public float getTemperature() {
 		return temperature;
 	}
 	public int getCurrent() {
@@ -41,12 +41,12 @@ public class Cell {
 		working = false;
 	}
 	
-	public void upVoltage(int charge)
+	public void upCharge(int charge)
 	{
-		voltage = voltage + charge;
+		charge = charge + charge;
 	}
-	public void downVoltage (int load)
+	public void downCharge (int load)
 	{
-		voltage = voltage - load;
+		charge = charge - load;
 	}
 }

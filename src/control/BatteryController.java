@@ -29,11 +29,11 @@ public class BatteryController extends Thread implements ReportObservable {
 	
 	
 //BMS.CHARGE_AMOUNT_CELL1
-	Cell cellOne = new Cell(20, 20, 20, 1, true);
-	Cell cellTwo = new Cell(20, 20, 20, 2, true);
-	Cell cellThree = new Cell(20, 20, 20, 3, true);
-	Cell cellFour = new Cell(20, 20, 20, 4, true);
-	Cell cellFive = new Cell(20, 20, 20, 5, true);
+	Cell cellOne = new Cell((Float)BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1), (Float) BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE), 20, 1, true);
+	Cell cellTwo = new Cell((Float)BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2), (Float) BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE), 20, 2, true);
+	Cell cellThree = new Cell((Float)BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3), (Float) BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE), 20, 3, true);
+	Cell cellFour = new Cell((Float)BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4), (Float) BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE), 20, 4, true);
+	Cell cellFive = new Cell((Float)BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5), (Float) BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE), 20, 5, true);
 	Cell[] cellArray = new Cell[]{ cellOne, cellTwo, cellThree,cellFour, cellFive};
 	
 	public BatteryController( BatteryReport batteryReport)
@@ -43,7 +43,7 @@ public class BatteryController extends Thread implements ReportObservable {
 		
 		batteryReport.addObserver(this);
 		
-		bcu = new BatteryControlUnit();		
+		bcu = new BatteryControlUnit(batteryReport);		
 		chargeB = new BalanceCharge(cellArray, 10, bcu, status);
 		loadB = new BalanceLoad(cellArray, 2, bcu, status);
 		thermB = new ThermalController(status);
