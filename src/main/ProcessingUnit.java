@@ -4,7 +4,7 @@ import soc.BatteryReport;
 import soc.ReportObservable;
 import soh.SOHObserver;
 import soh.SOHSystem;
-import sun.rmi.runtime.Log;
+
 
 public class ProcessingUnit extends Thread implements ProcessingUnitInterface, ReportObservable, SOHObserver {
 
@@ -224,8 +224,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     System.out.format("Distance to next Pump : %.2f Km \n", Math.abs(gps.getNextNearestPumpDistance()));
                     
                     System.out.format("Battery Temperature : %.1f degree celcius \n",BMS.getDataInCollection(BMS.CURRENT_BATTERY_TEMPERATURE));
-                    System.out.format("Battery Health : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_HEALTH));
-                    System.out.format("Reamind of life : %d  \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_LIFE));
+                    System.out.format("Battery Health : %d %% \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_HEALTH));
+                    System.out.format("Remaining Useful Life : %d days \n",(Integer)BMS.getDataInCollection(BMS.BATTERY_LIFE));
 
                     /*if (alert.getType() > 0) {
                         showAlerts(alert);
@@ -280,8 +280,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 		
 		System.out.println("\n\nLoad/Consumption Rate:" + BMS.getDataInCollection(BMS.CAR_LOAD));
     	//Log from Health Group
-		System.out.println("Battery Capacity: " + BMS.getDataInCollection(BMS.PRESENTCAPACITY));
-		System.out.println("Battery usefull health : " + BMS.getDataInCollection(BMS.BATTERY_LIFE));
+		System.out.println("Battery Capacity: " + BMS.getDataInCollection(BMS.PRESENTCAPACITY)+" MHA");
+		System.out.println("Remaining Useful Life : " + BMS.getDataInCollection(BMS.BATTERY_LIFE)+" days");
     	
     	System.out.println("--------------- System Log Information Ends --------------");
     	
