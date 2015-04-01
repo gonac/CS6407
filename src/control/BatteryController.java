@@ -85,7 +85,7 @@ public class BatteryController extends Thread implements ReportObservable {
             
     		runCode(chargeB, loadB, thermB, bcu);
 
-        } while (!BMS.BMS_STATE.toString().equals(BMSState.DAMAGED.toString()));
+        } while (BMS.BMS_STATE.toString().equals(BMSState.CHARGING.toString()) || BMS.BMS_STATE.toString().equals(BMSState.ONMOVE.toString()));
 		
 	}
 	

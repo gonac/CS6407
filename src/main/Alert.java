@@ -4,9 +4,10 @@ public enum Alert {
 
     NO_ALERT(0),
     ALERT_BATTERYLOW(1),
-    ALERT_OVERCHARGE(2),
-    ALERT_HIGHTEMP(3),
-    ALERT_DAMAGE(4);
+    ALERT_BATTERYEXAUSTED(2),
+    ALERT_OVERCHARGE(3),
+    ALERT_HIGHTEMP(4),
+    ALERT_DAMAGE(5);
     
     Alert(int type)
     {
