@@ -3,7 +3,6 @@ package soc;
 
 import main.BMSState;
 import main.BMS;
-
 import main.BMSState;
 import main.BMS;
 
@@ -33,11 +32,7 @@ public class BatteryMonitor extends Thread {
 
 
         //int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity
-        float [] cellPower = new float[]{ (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
-                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) ,
-                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
-                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
-                                          (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) };
+        float [] cellPower = getCellData();
 
 
 
@@ -67,6 +62,17 @@ public class BatteryMonitor extends Thread {
     *
     *
     * */
+    
+    
+    private float[] getCellData()
+    {
+    	 return new float[]{ (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) ,
+                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
+                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) };
+
+    }
 
     public void run()
     {
@@ -82,6 +88,7 @@ public class BatteryMonitor extends Thread {
                     on = true;
 
                 try {
+                	soc.setCellPower(getCellData());
                     soc.setCellSoc();
                     soc.setBatteryPower();
                     soc.setBatterySoc();
@@ -95,6 +102,8 @@ public class BatteryMonitor extends Thread {
 
                 on = true;
                 try {
+                	
+                	soc.setCellPower(getCellData());
                     soc.setCellSoc();
                     soc.setBatteryPower();
                     soc.setBatterySoc();

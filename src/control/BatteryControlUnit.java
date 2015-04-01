@@ -145,7 +145,7 @@ public class BatteryControlUnit {
 					if (cellMatrix[i].getCharge() <= (voltageLimit + rateOfCharge)) {
 //						System.out.println("Cell " + i + " has voltage "
 //								+ cellMatrix[i].getVoltage());
-						cellMatrix[i].upCharge(rateOfCharge);
+						cellMatrix[i].upCharge(rateOfCharge,i);
 //						System.out.println("Cell " + i + " was increased to"
 //								+ cellMatrix[i].getVoltage());
 
@@ -174,11 +174,11 @@ public class BatteryControlUnit {
 //						System.out.println("Cell " + i + ": voltage "
 //								+ cellMatrix[i].getVoltage());
 						if (cellMatrix[i] == unbalancedCell) {
-							cellMatrix[i].upCharge(rateOfCharge + 2);
+							cellMatrix[i].upCharge(rateOfCharge + 2,i);
 						} else if (cellMatrix[i] == cellToShare) {
-							cellMatrix[i].upCharge(rateOfCharge - 2);
+							cellMatrix[i].upCharge(rateOfCharge - 2,i);
 						} else {
-							cellMatrix[i].upCharge(rateOfCharge);
+							cellMatrix[i].upCharge(rateOfCharge,i);
 						}
 					}
 				}

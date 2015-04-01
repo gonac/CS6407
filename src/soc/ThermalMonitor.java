@@ -22,22 +22,24 @@ public class ThermalMonitor {
 
     public void checkTemperature() throws ValueOutOfBoundException {
 
+    	//System.err.println("Checking Temperature function");
        if (this.temp >= 70.0) {
             report.setAlert(Alert.OVERHEATING);
         } else if (this.temp < 0) {
             throw new ValueOutOfBoundException("Temperature is lower than 0");
         }
 
-        getTemperatureFromSensor();
+        this.getTemperatureFromSensor();
     }
 
     private void getTemperatureFromSensor() {
         /**
          * Get temperature from sensor
          */
+    	//System.err.println("Called function");
         Random rand = new Random(Calendar.getInstance().getTime().getTime());
         // get temp from [-100.0, 900.0]
-        setTemperature(temp + rand.nextFloat());
+        setTemperature(temp + 0.5f );//rand.nextFloat()
     }
 
     protected void setTemperature(float temp)

@@ -123,15 +123,15 @@ public class BatteryController extends Thread implements ReportObservable {
 					loadB.balanceLoad();
 
 					thermB.balanceTemperature();
-					System.out.println("Balance Load code happens now 1!");
+					//System.out.println("Balance Load code happens now 1!");
 					if (chargerConnected)
 					{
-						System.out.println("Moving from balanceLoad to balanceCharge.");
+						//System.out.println("Moving from balanceLoad to balanceCharge.");
 						testEnum=testEnum.balanceCharge;
 					}
 					else
 					{
-						System.out.println("Moving from balanceLoad to balanceTemp.");
+						//System.out.println("Moving from balanceLoad to balanceTemp.");
 						testEnum=testEnum.balanceTemperature;
 					}
 					break;

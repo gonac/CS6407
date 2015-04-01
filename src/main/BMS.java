@@ -141,7 +141,7 @@ public class BMS {
     public void executeBMSModule()
     {
     	this.controlUnit.start();
-    	//this.chargeBatteryMonitor.start();
+    	this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
     	
     	this.sohUnit.start();
@@ -236,8 +236,8 @@ public class BMS {
         float batteryChargeAmount = (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) +
                 (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) +
                 (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + (float) getDataInCollection(BMS.CHARGE_AMOUNT_CELL5);
-        centralStorage.put(BMS.BATTERY_LEVEL, new Integer(50));
-        centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryChargeAmount);
+        //centralStorage.put(BMS.BATTERY_LEVEL, new Integer(50));
+      //  centralStorage.put(BMS.BATTERY_CHARGE_AMOUNT, batteryChargeAmount);
         centralStorage.put(BMS.CAR_LOAD, new Float(2));
 
         processingUnit.setCarLoad((Float) BMS.getDataInCollection(BMS.CAR_LOAD));

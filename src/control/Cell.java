@@ -1,5 +1,7 @@
 package control;
 
+import main.BMS;
+
 public class Cell {
 	float charge;
 	float temperature;
@@ -41,9 +43,29 @@ public class Cell {
 		working = false;
 	}
 	
-	public void upCharge(int charge)
+	public void upCharge(int charge, int index)
 	{
-		charge = charge + charge;
+		this.charge = this.charge + charge;
+		if(index==0)
+		{
+			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL1, this.charge);
+		}
+		else if(index==1)
+		{
+			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL2, this.charge);
+		}
+		else if(index==2)
+		{
+			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL3, this.charge);
+		}
+		else if(index==3)
+		{
+			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL4, this.charge);
+		}
+		else if(index==4)
+		{
+			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL5, this.charge);
+		}
 	}
 	public void downCharge (int load)
 	{

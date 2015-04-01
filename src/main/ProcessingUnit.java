@@ -243,7 +243,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                 } else if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
                     System.out.println("------ Presenting GUI Output -------\n");
 
-                    storeChargingBatteryLevel();
+                    //storeChargingBatteryLevel();
 
                     showBatteryLevel();
                     System.out.println("Charge Amount : " + BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT));
@@ -254,6 +254,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
                     }*/
 
                     System.out.println("\n------ GUI Output End -------\n\n");
+                    
+                    printSystemLog();
                 }
             } 
         } catch (ValueOutOfBoundException exception) {
@@ -311,7 +313,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
             this.execute();
 
         }
-        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) < 100 && !BMS.getBMSStatus().toString().equals(BMSState.DAMAGED.toString()));
+        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) <= 100 && !BMS.getBMSStatus().toString().equals(BMSState.DAMAGED.toString()));
     	
     	BMS.BMS_STATE=BMSState.IDLE;
     }
