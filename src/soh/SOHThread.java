@@ -31,7 +31,7 @@ public class SOHThread extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (BMS.getBMSStatus().equals(BMSState.IDLE.toString())) {
+            if (BMS.getBMSStatus().equals(BMSState.IDLE.toString()) || BMS.getBMSStatus().equals(BMSState.DAMAGED.toString())) {
             	break;
             }else {
             	

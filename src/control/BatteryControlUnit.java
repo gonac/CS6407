@@ -81,13 +81,13 @@ public class BatteryControlUnit {
 		//int testLoadPerCell = 5; // just to be sure
 
 		if (!(balance.equals("UNBALANCED"))) {
-			for (int i = 0; i < cellLoadBalanceMatrix.length; i++) {
+			/*for (int i = 0; i < cellLoadBalanceMatrix.length; i++) {
 				//System.out.println("Cell " + i + " has voltage "
 				//		+ cellLoadBalanceMatrix[i].getVoltage());
 				cellLoadBalanceMatrix[i].downCharge(loadPerCell);
 	//			System.out.println("Cell " + i + " was reduced to"
 //						+ cellLoadBalanceMatrix[i].getVoltage());
-			}
+			}*/
 			return "Balanced load done!";
 		} else {
 			int unbalancedCell = this.batteryReport.getUnbalancedCell(); // random number between 1 and 5
@@ -142,6 +142,7 @@ public class BatteryControlUnit {
 			report.setAlert(ControlAlert.CHARGING);
 			if (!(balance.equals("UNBALANCED"))) {
 				for (int i = 0; i < cellMatrix.length; i++) {
+					
 					if (cellMatrix[i].getCharge() <= (voltageLimit + rateOfCharge)) {
 //						System.out.println("Cell " + i + " has voltage "
 //								+ cellMatrix[i].getVoltage());

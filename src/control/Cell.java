@@ -46,6 +46,10 @@ public class Cell {
 	public void upCharge(int charge, int index)
 	{
 		this.charge = this.charge + charge;
+		if(this.charge>100)
+		{
+			this.charge=100;
+		}
 		if(index==0)
 		{
 			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL1, this.charge);
@@ -70,5 +74,9 @@ public class Cell {
 	public void downCharge (int load)
 	{
 		charge = charge - load;
+		if(charge<0)
+		{
+			charge=0;
+		}
 	}
 }

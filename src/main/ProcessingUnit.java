@@ -158,7 +158,11 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 	        } else if ((alert.toString()).equals((Alert.ALERT_DAMAGE).toString())) {
 	            System.out.println("\n\nBattery is damages. Please replace.");
 	            returnVal=4;
-	        } 
+	        }
+	        else if ((alert.toString()).equals((Alert.ALERT_BATTERYEXAUSTED).toString())) {
+	        	System.out.println("\n\nBattery is exausted. Please charge.");
+	            returnVal=5;
+	        }
 	        System.out.println("\n---------- ALERT Finished------------\n");
 	        
     	}
@@ -171,6 +175,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     //For implementing alert sent from Charge group
     @Override
 	public void update() {
+    	
 		if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVER_DISCHARGE).toString()))
 		{
 			alert=Alert.ALERT_BATTERYLOW;
@@ -178,18 +183,19 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 		else if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVERCHARGE).toString()))
 		{
 			alert=Alert.ALERT_OVERCHARGE;
+			BMS.setBMSStatus(BMSState.IDLE);
 		}
 		else if((this.batteryReportCharge.getAlert().toString()).equals((soc.Alert.OVERHEATING).toString()))
 		{
 			alert=Alert.ALERT_HIGHTEMP;
 		}
-//		else if((this.batteryReportCharge.getAlert()).toString().equals(soc.Alert.BATTERY_EMPTY))
-//		{
-//			alert=Alert.ALERT_BATTERYEXAUSTED;
-//			BMS.setBMSStatus(BMSState.DAMAGED);
-//		}
+		else if((this.batteryReportCharge.getAlert()).toString().equals(soc.Alert.BATTERY_EMPTY.toString()))
+		{
+			alert=Alert.ALERT_BATTERYEXAUSTED;
+			BMS.setBMSStatus(BMSState.IDLE);
+		}
     	// TODO Auto-generated method stub
-		System.out.println("Alert " + alert.toString() + " \n Status : " + BMS.BMS_STATE.toString());
+		
 		showAlerts(alert);
 		
 	}
@@ -318,7 +324,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
             this.execute();
 
         }
-        while ((Float) BMS.getDataInCollection(BMS.BATTERY_CHARGE_AMOUNT) > 0 && (Integer) BMS.getDataInCollection(BMS.BATTERY_LEVEL) <= 100 && !BMS.getBMSStatus().toString().equals(BMSState.DAMAGED.toString()));
+        while (BMS.getBMSStatus().toString().equals(BMSState.ONMOVE.toString()) || BMS.getBMSStatus().toString().equals(BMSState.CHARGING.toString()));
     	
     	BMS.BMS_STATE=BMSState.IDLE;
     }
