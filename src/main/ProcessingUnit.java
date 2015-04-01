@@ -278,6 +278,8 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
 			System.out.println("\tCell 4: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4));
 			System.out.println("\tCell 5: " + BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5));
 		
+		System.out.println("\nFans Status: " + BMS.getDataInCollection(BMS.FANS_ON_OFF));
+		
 		System.out.println("\n\nLoad/Consumption Rate:" + BMS.getDataInCollection(BMS.CAR_LOAD));
     	//Log from Health Group
 		System.out.println("Battery Capacity: " + BMS.getDataInCollection(BMS.PRESENTCAPACITY));

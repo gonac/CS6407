@@ -2,6 +2,7 @@ package control;
 
 import java.util.Random;
 
+import soc.CellBalanceMonitor;
 import control.ControlAlert;
 import control.ControlReport;
 
@@ -66,7 +67,7 @@ public class BatteryControlUnit {
 		int loadAsKW = 20; // the load
 		int loadPerCell = loadAsKW / (cellLoadBalanceMatrix.length); // should
 																		// be 5
-		int testLoadPerCell = 5; // just to be sure
+		//int testLoadPerCell = 5; // just to be sure
 
 		if (!(balance.equals("UNBALANCED"))) {
 			for (int i = 0; i < cellLoadBalanceMatrix.length; i++) {
@@ -78,7 +79,7 @@ public class BatteryControlUnit {
 			}
 			return "Balanced load done!";
 		} else {
-			int unbalancedCell = 3; // random number between 1 and 5
+			int unbalancedCell = CellBalanceMonitor.getUnbalancedCell(); // random number between 1 and 5
 			int cellToShareLoad = 1;
 			for (int i = 0; i < cellLoadBalanceMatrix.length; i++) {
 				if (i == cellToShareLoad) {
