@@ -15,7 +15,7 @@ public class SOHSystem {
 	float Temperature;
 	float Current;
 	int time;
-
+	int brokenNo=0;
 	float PresentCapacity_me;
 	float InCA_me;
 	CPUOut cpuOut;
@@ -45,10 +45,10 @@ public class SOHSystem {
 	public SOHSystem() {
 		// TODO Auto-generated constructor stub
 
-//		float[] voltageArr = { (float) (Math.random() * 120),
-//				(float) (Math.random() * 120), (float) (Math.random() * 120),
-//				(float) (Math.random() * 120), (float) (Math.random() * 120) };
-		float [] voltageArr = {121f,121f,121f,121f,121f};
+		float[] voltageArr = { (float) (Math.random() * 120),
+				(float) (Math.random() * 120), (float) (Math.random() * 120),
+				(float) (Math.random() * 120), (float) (Math.random() * 120) };
+		//float [] voltageArr = {121f,121f,121f,121f,121f};
 		this.voltage = voltageArr;
 		this.Current = (float) (Math.random() * 40);
 		// if(this.Current < 1f)
@@ -67,11 +67,14 @@ public class SOHSystem {
 		return batteryOut;
 	}
 
+	
+	
 	int getBrokenCell() {
 		int broken = 0;
 		for (int i = 0; i < voltage.length; i++) {
 			if (voltage[i] <= 0 || voltage[i] > 120) {
 				broken += 1;
+				brokenNo=i+1;
 			} else if (i == 0
 					&& (Float) BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) < 0) {
 				broken++;
@@ -94,7 +97,10 @@ public class SOHSystem {
 		return broken;
 
 	}
-
+			int getCellNO(){
+				return brokenNo;
+				
+			}
 	SensorOut getDataFromSensor(BatteryOut batteryOut) {
 		float[] v_BO = batteryOut.getVoltage();
 		float T_BO = batteryOut.getTemperature();
