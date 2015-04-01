@@ -2,6 +2,9 @@ package control;
 
 import java.util.Random;
 
+import control.ControlAlert;
+import control.ControlReport;
+
 public class BatteryControlUnit {
 	
 	public Cell[] limpHome(Cell[] cellMatrix) {
@@ -98,13 +101,19 @@ public class BatteryControlUnit {
 	}
 
 	public String balanceCharge(Cell[] cellMatrix, String balance, int rateOfCharge) {
+
+		ControlReport report = new ControlReport();
+		ControlAlert alert;
+		
 		int voltageLimit = 100;
 		boolean fullyCharged = false;
 
 		// determine if battery is fully charged
 
 		// charge the batteries in a balanced way
-		if (!(balance.equals("ALERT_OVERCHARGE")) ) {
+		if (!(balance.equals("ALERT_OVERCHARGE")) ) 
+		{
+			report.setAlert(ControlAlert.CHARGING);
 			if (!(balance.equals("UNBALANCED"))) {
 				for (int i = 0; i < cellMatrix.length; i++) {
 					if (cellMatrix[i].getVoltage() <= (voltageLimit + rateOfCharge)) {
@@ -152,6 +161,7 @@ public class BatteryControlUnit {
 			}
 		} else {
 		//	System.out.println("Battery is already fully charged. Disconnect charger!");
+			report.setAlert(ControlAlert.FULLY_CHARGED);
 			return "Battery full";
 		}
 	}

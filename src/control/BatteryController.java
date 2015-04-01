@@ -58,11 +58,22 @@ public class BatteryController extends Thread implements ReportObservable {
 	
 	public void run()
 	{
-		BatteryController myBC = new BatteryController(batteryReport);
-		BalanceCharge chargeB = new BalanceCharge(cellArray, 10, bcu, status);
-		BalanceLoad loadB = new BalanceLoad(cellArray, 2, bcu, status);
-		ThermalController thermB = new ThermalController(status);
-		myBC.runCode(chargeB, loadB, thermB, bcu);
+		do {
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            BatteryController myBC = new BatteryController(batteryReport);
+    		BalanceCharge chargeB = new BalanceCharge(cellArray, 10, bcu, status);
+    		BalanceLoad loadB = new BalanceLoad(cellArray, 2, bcu, status);
+    		ThermalController thermB = new ThermalController(status);
+    		myBC.runCode(chargeB, loadB, thermB, bcu);
+
+        } while ();
+		
 	}
 	
 	synchronized public void runCode(BalanceCharge chargeB, BalanceLoad loadB, ThermalController thermB,
