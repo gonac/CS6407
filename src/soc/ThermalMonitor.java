@@ -37,12 +37,12 @@ public class ThermalMonitor {
          */
         Random rand = new Random(Calendar.getInstance().getTime().getTime());
         // get temp from [-100.0, 900.0]
-        this.temp += rand.nextFloat();
-        BMS.centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, temp);
+        setTemperature(temp + rand.nextFloat());
     }
 
     protected void setTemperature(float temp)
     {
-        this.temp = temp; //(Double)  BMS.centralStorage.get(BMS.CURRENT_BATTERY_TEMPERATURE);
+        this.temp = temp;
+        BMS.centralStorage.put(BMS.CURRENT_BATTERY_TEMPERATURE, temp);
     }
 }
