@@ -282,7 +282,7 @@ public class ProcessingUnit extends Thread implements ProcessingUnitInterface, R
     	//Log from Health Group
 		System.out.println("Battery Capacity: " + BMS.getDataInCollection(BMS.PRESENTCAPACITY)+" MHA");
 		System.out.println("Remaining Useful Life : " + BMS.getDataInCollection(BMS.BATTERY_LIFE)+" days");
-    	
+		System.out.println("Battery Healthy : " + BMS.getDataInCollection(BMS.BATTERY_HEALTH)+" %");
     	System.out.println("--------------- System Log Information Ends --------------");
     	
     }
