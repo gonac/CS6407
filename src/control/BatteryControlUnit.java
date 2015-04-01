@@ -137,9 +137,8 @@ public class BatteryControlUnit {
 					cellIdToShare = rand.nextInt(5);
 				}
 				// for testing purposes, find the unbalanced cell
-				// NOTE: Assuming that unbalancedCell is balanced LOWER THAN the
-				// other cells
-				//CellBalanceMonitor.getUnbalancedCell
+				// NOTE: Assuming that unbalancedCell is balanced LOWER THAN the other cells
+				//CellBalanceMonitor.getUnbalancedCell()
 				//WE GET THE UNBALANCED CELL BY CALLING THE "getUnbalancedCell()" method from CellBalanceMonitor.java
 				Cell unbalancedCell = cellMatrix[cellRef];
 				Cell cellToShare = cellMatrix[cellIdToShare];
@@ -160,24 +159,8 @@ public class BatteryControlUnit {
 			return "Unbalanced charging done!"; 
 			}
 		} else {
-		//	System.out.println("Battery is already fully charged. Disconnect charger!");
 			report.setAlert(ControlAlert.FULLY_CHARGED);
 			return "Battery full";
 		}
 	}
 }
-
-/*
- * THIS SHOULD NOT RUN IN ANY LOOP FORM STEPS: -We get the current load
- * from the BMS. Before integration, we represent this as the loadAsKW
- * var below. -We look at the voltage of each cell -If all cells are
- * even, divide loadAsKW into 5 and decrement voltage level from each.
- * 
- * **NORMAL RUN [If voltage all balanced]** - divide load into 5
- * (cellMatrix.length)
- * 
- * ***State of Imbalance!*** -We hear from Charge Team if one cell's
- * voltage < 5+another cell's voltage. Mark this cell. - now fix their
- * order -desynchedCell'sCharge -= 2; nextGoodCell'sCharge += 2;
- * **Resume as normal**
- */

@@ -1,6 +1,7 @@
 package control;
 
 import main.BMS;
+import main.BMSState;
 import soc.Alert;
 import soc.BatteryReport;
 import soc.ReportObservable;
@@ -11,7 +12,7 @@ import soc.ReportObservable;
 
 public class BatteryController extends Thread implements ReportObservable {
 
-	boolean vehicleOn = true;//BMS.getVehicleStatus();
+	//boolean vehicleOn = true;//BMS.getVehicleStatus();
 	boolean chargerConnected = false; //BMS.chargerConnected();
 	int chargeRate =  10; //must get this from somewhere
 	int loadRate = 10; //must get this from somewhere
@@ -28,8 +29,9 @@ public class BatteryController extends Thread implements ReportObservable {
 	Cell cellFive = new Cell(20, 20, 20, 5, true);
 	Cell[] cellArray = new Cell[]{ cellOne, cellTwo, cellThree,cellFour, cellFive};
 	
-	public BatteryController( BatteryReport batteryReport )
+	public BatteryController( BatteryReport batteryReport, boolean chargerState )
 	{
+		this.chargerConnected = chargerState;
 		this.testEnum = BCenum.idle;
 		this.batteryReport = batteryReport;
 		
@@ -66,13 +68,14 @@ public class BatteryController extends Thread implements ReportObservable {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            BatteryController myBC = new BatteryController(batteryReport);
+            BatteryController myBC = new BatteryController(batteryReport, true);
     		BalanceCharge chargeB = new BalanceCharge(cellArray, 10, bcu, status);
     		BalanceLoad loadB = new BalanceLoad(cellArray, 2, bcu, status);
     		ThermalController thermB = new ThermalController(status);
     		myBC.runCode(chargeB, loadB, thermB, bcu);
+    		i++;
 
-        } while ();
+        } while (!BMS.BMS_STATE.toString().equals(BMSState.DAMAGED.toString()));
 		
 	}
 	
@@ -80,12 +83,12 @@ public class BatteryController extends Thread implements ReportObservable {
 			BatteryControlUnit bcu){
 		for (int i = 0; i < 3; i++)
 		{
-			switch(testEnum)
+			switch(BMS.BMS_STATE.getStateValue())
 			{
-				case idle:
+				case 0:
 					//muh idle code
-					System.out.println("In idle state.");
-					if (vehicleOn || chargerConnected)
+					/*System.out.println("In idle state.");
+					if (chargerConnected)
 					{
 						System.out.println("Moving from idle to active state.");
 						testEnum = testEnum.active;
@@ -94,34 +97,21 @@ public class BatteryController extends Thread implements ReportObservable {
 					{ //do nothing
 						System.out.println("Staying in idle state.");
 						testEnum = testEnum.idle;
-					}
+					}*/
 					break;
 					
-				case active:
-					//muh Active code
-					System.out.println("In active state.");
-					if (!vehicleOn && !chargerConnected)
-					{
-						System.out.println("Moving from active to idle.");
-						testEnum = testEnum.idle;
-					}
-					else if (vehicleOn)
-					{
-						System.out.println("Moving from active to balanceLoad.");
-						testEnum = testEnum.balanceLoad;
-					}
-					break;
-					
-				case balanceCharge:
+				case 1:
 					//balance charge, change to fit states
 					System.out.println("Balance Charge code happens now!");
 					chargeB.balanceCharge(chargeRate, cellArray);
+					thermB.balanceTemperature();
 					
-					testEnum=testEnum.balanceTemperature;
 					
-				case balanceLoad:
+				case 2:
 					//balance yo' load
 					loadB.balanceLoad();
+
+					thermB.balanceTemperature();
 					System.out.println("Balance Load code happens now!");
 					if (chargerConnected)
 					{
@@ -135,15 +125,13 @@ public class BatteryController extends Thread implements ReportObservable {
 					}
 					break;
 					
-				case balanceTemperature:
+				/*case balanceTemperature:
 					System.out.println("Balance Temperature code happens now!" +
 							"\nMoving from balanceTemp to active.");
-					thermB.balanceTemperature();
 					/*chargerConnected=false;
-					vehicleOn = false;
 					
 					testEnum=testEnum.active; */
-					break;
+					break;*/
 			}
 		}
 	} 
