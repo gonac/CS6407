@@ -1,5 +1,7 @@
 package control;
 
+import soc.Alert;
+
 public class ThermalController {
 	public boolean fansOn;
 	String status;
@@ -9,14 +11,18 @@ public class ThermalController {
 		this.status = status;
 	}
 	
+	public void setStatus(String status)
+	{
+		this.status = status;
+	}
+	
 	public boolean balanceTemperature()
 	{
-		fansOn=false;
-		if (!(status.equals("OVERHEATED"))) {	
-			fansOn=false;
+		if ((status.equals(Alert.OVERHEATING.toString()))) {	
+			fansOn=true;
 		}
 		else { 
-			fansOn=true;
+			fansOn=false;
 		}
 		return fansOn;
 	}
