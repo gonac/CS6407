@@ -1,6 +1,5 @@
 package control;
 
-import main.Alert;
 import main.BMS;
 
 public class ThermalController {
@@ -14,11 +13,16 @@ public class ThermalController {
 	
 	public void setStatus(String status)
 	{
+
 		this.status=status;
+
+		this.status = status;
+
 	}
 	
 	public boolean balanceTemperature()
 	{
+
 		if ((status.equals(soc.Alert.OVERHEATING.toString()))) {	
 			fansOn=true;
 		}
