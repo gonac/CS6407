@@ -1,6 +1,6 @@
 package control;
 
-import soc.Alert;
+import main.BMS;
 
 public class ThermalController {
 	public boolean fansOn;
@@ -13,17 +13,23 @@ public class ThermalController {
 	
 	public void setStatus(String status)
 	{
+
+		this.status=status;
+
 		this.status = status;
+
 	}
 	
 	public boolean balanceTemperature()
 	{
-		if ((status.equals(Alert.OVERHEATING.toString()))) {	
+
+		if ((status.equals(soc.Alert.OVERHEATING.toString()))) {	
 			fansOn=true;
 		}
 		else { 
 			fansOn=false;
 		}
+		BMS.storeDataInCollection(BMS.FANS_ON_OFF, fansOn);
 		return fansOn;
 	}
 }

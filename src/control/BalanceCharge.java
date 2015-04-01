@@ -25,13 +25,13 @@ public class BalanceCharge {
 		String cellChargeBalanceMatrix = null;
 		if (cellChargeCycles > 0)
 		{	
-			System.out.println("Before load: Cell array's initial values were "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) + ", " 
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5) + "!"
-			);
+//			System.out.println("Before load: Cell array's initial values were "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) + ", " 
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5) + "!"
+//			);
 			//BCU.balanceCharge() should be called.
 			bcu.balanceCharge(cellArray, status, rateOfCharge);
 			
@@ -41,13 +41,13 @@ public class BalanceCharge {
 			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL3, (float)(cellArray[2].getVoltage()));
 			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL4, (float)(cellArray[3].getVoltage()));
 			BMS.storeDataInCollection(BMS.CHARGE_AMOUNT_CELL5, (float)(cellArray[4].getVoltage()));
-			System.out.println("After charge: Cell arrays now have a charge of "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + ", "
-					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5) + "!"
-			);
+//			System.out.println("After charge: Cell arrays now have a charge of "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL1) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL2) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL3) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL4) + ", "
+//					+ BMS.getDataInCollection(BMS.CHARGE_AMOUNT_CELL5) + "!"
+//			);
 																				
 			cellChargeCycles--;
 			cellChargesUsed++;
