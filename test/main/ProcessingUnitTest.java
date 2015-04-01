@@ -10,12 +10,15 @@ import main.BMS;
 import main.GPSStub;
 import main.ProcessingUnit;
 import main.ValueOutOfBoundException;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import soc.Alert;
 import soc.BatteryMonitor;
 import soc.BatteryReport;
 import soc.SOCLogic;
+import soh.SOHSystem;
 public class ProcessingUnitTest {
 	public static ConcurrentHashMap<String, Object> centralStorage;	
 	ProcessingUnit unit;
@@ -25,6 +28,7 @@ public class ProcessingUnitTest {
 	BatteryReport report;
 	SOCLogic soc;
 	BatteryMonitor monitor;
+	SOHSystem sys;
 	//CarSensor cs;
 	@Before
 	public void setup() throws ValueOutOfBoundException
@@ -35,8 +39,9 @@ public class ProcessingUnitTest {
 				bms.initializeDummy();
 				monitor=new BatteryMonitor(report);
 				report= new BatteryReport();
+				sys=new SOHSystem();
 				bms.chargeBatteryMonitor=new BatteryMonitor(bms.socBatteryReport);	
-				unit = new ProcessingUnit(report);
+				unit = new ProcessingUnit(report,sys);
 				stub=new GPSStub(100f);
 				
 				
@@ -93,7 +98,6 @@ public class ProcessingUnitTest {
 		report.setAlert(Alert.UNBALANCED);
 		unit.update();
 		assertEquals(Alert.UNBALANCED,report.getAlert());
-		
 	}
 	
 	@Test
@@ -169,6 +173,19 @@ public class ProcessingUnitTest {
 		assertEquals(3,unit.showAlerts(main.Alert.ALERT_HIGHTEMP).intValue());
 		assertEquals(0,unit.showAlerts(main.Alert.NO_ALERT).intValue());
 	}
+	
+	@Test
+	public void testSOHAlert()
+	{
+		sys.setStateOfBattery(soh.Exception.BATTERYDAMAGE);
+		assertEquals(-400,sys.getStateOfBattery());
+		unit.updateSOH();
+		//assertEquals(4,unit.getState());
+		assertEquals(BMS.BMS_STATE.DAMAGED.toString(),BMS.getBMSStatus());
+		//assertEquals(4,unit.showAlerts(main.Alert.ALERT_DAMAGE).intValue());
+		
+	}
+	
 	@Test
 	public void updateCharge() throws ValueOutOfBoundException
 	{

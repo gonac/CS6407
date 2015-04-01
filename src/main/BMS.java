@@ -2,6 +2,7 @@ package main;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import control.BatteryController;
 import soc.BatteryMonitor;
 import soc.BatteryReport;
 import soh.SOHSystem;
@@ -42,6 +43,9 @@ public class BMS {
     
     public static final String BATTERY_HEALTH = "batteryHealth";							//Storing overall Battery health from health Group
     public static final String BATTERY_LIFE = "batteryLife";								//Storing battery life in days from health group
+    public static final String FANS_ON_OFF = "fansOnOff";									//Storing information whether the fans are on or not
+    
+    
 
     //BMS State
 
@@ -57,6 +61,8 @@ public class BMS {
 
     //All Groups references
     BatteryMonitor chargeBatteryMonitor;
+    
+    BatteryController controlUnit;
     ProcessingUnit processingUnit;
     SOHThread sohUnit;
 
@@ -97,6 +103,8 @@ public class BMS {
         centralStorage.put(BMS.BATTERY_HEALTH, new Integer(0));
         centralStorage.put(BMS.BATTERY_LIFE, new Integer(0));
         
+        centralStorage.put(BMS.FANS_ON_OFF, false);
+        
         
         /*Initializing all the required objects*/
         socBatteryReport=new BatteryReport();
@@ -132,6 +140,7 @@ public class BMS {
     //Executing threads of other groups
     public void executeBMSModule()
     {
+    	this.controlUnit.start();
     	this.chargeBatteryMonitor.start();
     	this.processingUnit.start();
     	
@@ -245,7 +254,8 @@ public class BMS {
             return;
         }
         bmsObject.chargeBatteryMonitor=new BatteryMonitor(bmsObject.socBatteryReport);
-		
+		bmsObject.controlUnit = new BatteryController(bmsObject.socBatteryReport);
+        
         bmsObject.initializeDummy();
         
         bmsObject.executeBMSModule();

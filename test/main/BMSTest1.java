@@ -12,6 +12,7 @@ import org.junit.Test;
 import soc.BatteryMonitor;
 import soc.BatteryReport;
 import soc.SOCLogic;
+import soh.SOHSystem;
 
 
 public class BMSTest1 {
@@ -23,18 +24,19 @@ public class BMSTest1 {
 	BatteryReport report;
 	SOCLogic soc;
 	BatteryMonitor monitor;
+	SOHSystem sys;
 	@Before
 	public void setup() throws ValueOutOfBoundException
 	{	String[] inputs = {"Driving","60","55","65","75","50","65","50"};
 		soc=new SOCLogic();
 		bms= new BMS();
 		bms.storeUserInputs(inputs);
-		
+		sys=new SOHSystem();
 		monitor=new BatteryMonitor(report);
 		report= new BatteryReport();
 		bms.chargeBatteryMonitor=new BatteryMonitor(bms.socBatteryReport);
 		
-		unit=new ProcessingUnit(report);
+		unit=new ProcessingUnit(report,sys);
 		
 	}
 
@@ -46,6 +48,11 @@ public class BMSTest1 {
 		assertEquals("2.0",BMS.getDataInCollection(BMS.CAR_LOAD).toString());
 	}
 	@Test
+	public void testThread()
+	{
+		
+	}
+	@Test
 	public void testExec()
 	{
 		bms.executeBMSModule();
@@ -54,7 +61,7 @@ public class BMSTest1 {
 	public void test8StoreInputs() throws ValueOutOfBoundException
 	{	
 		String[] inputs={"Driving","60","55","65","75","50","65","50"};
-		bms.storeUserInputs(inputs);
+		assertEquals(true,bms.storeUserInputs(inputs));
 		assertEquals(60f,BMS.getDataInCollection(BMS.CAR_SPEED));
 	}
 	

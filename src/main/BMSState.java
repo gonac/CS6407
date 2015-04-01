@@ -11,4 +11,8 @@ public enum BMSState {
     BMSState(int value) {
         stateValue = value;
     }
+    public int getStateValue()
+    {
+    	return stateValue;
+    }
 }
