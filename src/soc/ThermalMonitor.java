@@ -13,10 +13,12 @@ public class ThermalMonitor {
     public Float temp = 0f; //remember to make private
 
     private BatteryReport report = null;
+    Random rand;
 
 
     public ThermalMonitor(BatteryReport report) {
         this.report = report;
+        rand = new Random(Calendar.getInstance().getTime().getTime());
     }
 
 
@@ -37,9 +39,9 @@ public class ThermalMonitor {
          * Get temperature from sensor
          */
     	//System.err.println("Called function");
-        Random rand = new Random(Calendar.getInstance().getTime().getTime());
+       // Random rand = new Random(Calendar.getInstance().getTime().getTime());
         // get temp from [-100.0, 900.0]
-        setTemperature(temp + 0.5f );//rand.nextFloat()
+        setTemperature(temp + rand.nextFloat());
     }
 
     protected void setTemperature(float temp)

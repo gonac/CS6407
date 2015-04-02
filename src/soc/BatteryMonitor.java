@@ -64,6 +64,7 @@ public class BatteryMonitor extends Thread {
             if (cellData[i] < 0) {
                 cellData[i] = 0;
                 numberOfBadCells++;
+
             }
 
         }
