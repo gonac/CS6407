@@ -10,25 +10,20 @@ public class BatteryMonitor extends Thread {
     private boolean on = true;
     private SOCLogic soc;
     private CellBalanceMonitor cellBalanceMonitor;
-    //private BatteryReport batteryReport;
     private ChargeMonitor chargeMonitor;
 
     private ThermalMonitor thermalMonitor;
 
-    public BatteryMonitor( BatteryReport batteryReport) {
-        //this. batteryReport = batteryReport;
-        this.soc  = new SOCLogic();
+    public BatteryMonitor(BatteryReport batteryReport) {
+        this.soc = new SOCLogic();
         this.cellBalanceMonitor = new CellBalanceMonitor(batteryReport);
         this.chargeMonitor = new ChargeMonitor(batteryReport);
         this.thermalMonitor = new ThermalMonitor(batteryReport);
 
-
-        //int batterySoc, float[] cellPower, float batteryPower, float cellCapacity, float batteryCapacity
-        float [] cellPower = getCellData();
+        float[] cellPower = getCellData();
 
 
-
-        soc.setCellCapacity( (Float ) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS));
+        soc.setCellCapacity((Float) BMS.centralStorage.get(BMS.TOTAL_CAPACITY_EACH_CELLS));
         soc.setBatteryCapacity((Float) BMS.centralStorage.get(BMS.TOTAL_BATTERY_CAPACITY));
         soc.setCellPower(cellPower);
         soc.setCellSoc();
@@ -54,24 +49,23 @@ public class BatteryMonitor extends Thread {
     *
     *
     * */
-    
-    
-    private float[] getCellData()
-    {
-        int numberOfBadCells = 0;
-        float [] cellData;
-        cellData =  new float[]{ (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
-                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) ,
-                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
-                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1 ),
-                (Float ) BMS.centralStorage.get( BMS.CHARGE_AMOUNT_CELL1) };
 
-        for ( int i = 0; i < cellData.length; i++ ){
-            if ( cellData[i]  < 0 ){
+
+    private float[] getCellData() {
+        int numberOfBadCells = 0;
+        float[] cellData;
+        cellData = new float[]{(Float) BMS.centralStorage.get(BMS.CHARGE_AMOUNT_CELL1),
+                (Float) BMS.centralStorage.get(BMS.CHARGE_AMOUNT_CELL1),
+                (Float) BMS.centralStorage.get(BMS.CHARGE_AMOUNT_CELL1),
+                (Float) BMS.centralStorage.get(BMS.CHARGE_AMOUNT_CELL1),
+                (Float) BMS.centralStorage.get(BMS.CHARGE_AMOUNT_CELL1)};
+
+        for (int i = 0; i < cellData.length; i++) {
+            if (cellData[i] < 0) {
                 cellData[i] = 0;
                 numberOfBadCells++;
             }
-            
+
         }
 
         on = !(numberOfBadCells == cellData.length);
@@ -79,9 +73,8 @@ public class BatteryMonitor extends Thread {
         return cellData;
     }
 
-    public void run()
-    {
-        while( on ) {
+    public void run() {
+        while (on) {
 
             try {
                 Thread.sleep(5000);
@@ -90,10 +83,10 @@ public class BatteryMonitor extends Thread {
             }
 
             if (BMS.getBMSStatus().equals(BMSState.CHARGING.toString())) {
-                    on = true;
+                on = true;
 
                 try {
-                	soc.setCellPower(getCellData());
+                    soc.setCellPower(getCellData());
                     soc.setCellSoc();
                     soc.setBatteryPower();
                     soc.setBatterySoc();
@@ -107,23 +100,21 @@ public class BatteryMonitor extends Thread {
 
                 on = true;
                 try {
-                	
-                	soc.setCellPower(getCellData());
+
+                    soc.setCellPower(getCellData());
                     soc.setCellSoc();
                     soc.setBatteryPower();
                     soc.setBatterySoc();
                     cellBalanceMonitor.checkCellBalance(soc.getCellSoc());
                     chargeMonitor.checkChargeLevel(soc.getBatterySoc());
                     thermalMonitor.checkTemperature();
-                    
+
                 } catch (ValueOutOfBoundException e) {
                     e.printStackTrace();
                 }
-                
-            }
-            else
-            {
-            	on=false;
+
+            } else {
+                on = false;
             }
         }
     }
