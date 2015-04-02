@@ -1,18 +1,10 @@
 
 package soc;
 
-import main.BMSState;
 import main.BMS;
 import main.BMSState;
-import main.BMS;
 
 public class BatteryMonitor extends Thread {
-
-
-   // public static final String BATTERY_SOC = "BATTERY_SOC";
-    //public static final String SOC_PER_CELL = " ";
-    // Current power the battery holds
-   // public static final String BATTERY_LEVEL = "BATTERY_LEVEL";
 
 
     private boolean on = true;
